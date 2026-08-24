@@ -300,6 +300,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       passExam,
       activatePremium,
       cancelPremium,
+      syncPremium,
     }),
     [
       state,
@@ -315,6 +316,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       passExam,
       activatePremium,
       cancelPremium,
+      syncPremium,
     ],
   );
 
