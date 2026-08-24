@@ -1,9 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Check, Crown, Heart, Infinity as InfinityIcon, Sparkles, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Check, Crown, Heart, Infinity as InfinityIcon, Sparkles, Zap, Loader2, ExternalLink } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { Mascot } from "@/components/Mascot";
 import { PREMIUM_PRICE_LABEL, useStore } from "@/lib/store";
+import { useServerFn } from "@tanstack/react-start";
+import { getPicPayLink, createPurchase, getLatestPurchase } from "@/lib/payments.functions";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/premium")({
   head: () => ({
