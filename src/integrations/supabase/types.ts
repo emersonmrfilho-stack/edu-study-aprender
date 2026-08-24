@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      premium_purchases: {
+        Row: {
+          amount: number
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          external_id: string | null
+          id: string
+          provider: string
+          status: Database["public"]["Enums"]["purchase_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          external_id?: string | null
+          id?: string
+          provider?: string
+          status?: Database["public"]["Enums"]["purchase_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          external_id?: string | null
+          id?: string
+          provider?: string
+          status?: Database["public"]["Enums"]["purchase_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       progress: {
         Row: {
           created_at: string
@@ -35,15 +74,34 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      purchase_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -170,6 +228,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      purchase_status: ["pending", "approved", "rejected"],
+    },
   },
 } as const

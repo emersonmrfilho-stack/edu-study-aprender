@@ -60,8 +60,13 @@ function numOptions(r: Rng, correct: number, prompt: string): Exercise {
 }
 
 // ---------- Matemática procedural por ano ----------
-function mathExercise(level: number, unit: number, r: Rng): Exercise {
-  const pick = (fns: ((r: Rng) => Exercise)[]) => fns[ri(r, 0, fns.length - 1)]!(r);
+/**
+ * Gera exercícios de matemática variados. O parâmetro `slot` garante que,
+ * dentro de uma mesma lição, cada posição use um modelo diferente (sem repetição
+ * de templates consecutivos).
+ */
+function mathExercise(level: number, unit: number, r: Rng, slot: number): Exercise {
+  const pick = (fns: ((r: Rng) => Exercise)[]) => fns[slot % fns.length]!(r);
 
   if (level <= 2) {
     return pick([
@@ -82,6 +87,11 @@ function mathExercise(level: number, unit: number, r: Rng): Exercise {
       (r) => {
         const a = ri(r, 2, 12);
         return tf(`${a} + ${a} é igual ao dobro de ${a}.`, true);
+      },
+      (r) => {
+        const a = ri(r, 1, level === 1 ? 10 : 50);
+        const b = ri(r, 1, level === 1 ? 10 : 50);
+        return sel(`Qual número vem antes de ${a + b + 1}?`, [String(a + b), String(a + b + 2), String(a + b - 1), String(a + b + 3)], 0);
       },
     ]);
   }
@@ -111,6 +121,11 @@ function mathExercise(level: number, unit: number, r: Rng): Exercise {
         const w = ri(r, 3, 12);
         return numOptions(r, l * w, `Qual é a área de um retângulo de ${l} cm por ${w} cm? (em cm²)`);
       },
+      (r) => {
+        const total = ri(r, 10, 50);
+        const part = ri(r, 1, total - 1);
+        return numOptions(r, part, `De ${total} bolinhas, ${part} são vermelhas. Quantas são vermelhas?`);
+      },
     ]);
   }
   if (level <= 7) {
@@ -134,6 +149,11 @@ function mathExercise(level: number, unit: number, r: Rng): Exercise {
         const p = ri(r, 1, 9) * 10;
         const v = ri(r, 2, 20) * 10;
         return numOptions(r, (p * v) / 100, `Quanto é ${p}% de ${v}?`);
+      },
+      (r) => {
+        const a = ri(r, 2, 20);
+        const b = ri(r, 2, 20);
+        return numOptions(r, a * b, `Qual é o produto de ${a} e ${b}?`);
       },
     ]);
   }
@@ -168,6 +188,11 @@ function mathExercise(level: number, unit: number, r: Rng): Exercise {
         );
       },
       () => sel("Qual é a probabilidade de sair cara ao lançar uma moeda?", ["50%", "25%", "75%", "100%"], 0),
+      (r) => {
+        const a = ri(r, 1, 10);
+        const b = ri(r, 1, 10);
+        return numOptions(r, a * b, `Um retângulo tem lados ${a} e ${b}. Qual é sua área?`);
+      },
     ]);
   }
   if (level === 10) {
@@ -195,6 +220,12 @@ function mathExercise(level: number, unit: number, r: Rng): Exercise {
           ["Para cima, pois a > 0", "Para baixo, pois a < 0", "Não é parábola", "Depende de x"],
           0,
         ),
+      (r) => {
+        const a1 = ri(r, 1, 5);
+        const q = ri(r, 2, 4);
+        const n = ri(r, 3, 6);
+        return numOptions(r, a1 * Math.pow(q, n - 1), `Numa PG com a₁ = ${a1} e q = ${q}, qual é a${n}?`);
+      },
     ]);
   }
   if (level === 11) {
@@ -211,6 +242,10 @@ function mathExercise(level: number, unit: number, r: Rng): Exercise {
         return numOptions(r, (n * (n - 1)) / 2, `Quantas combinações de 2 elementos existem em um grupo de ${n}?`);
       },
       () => sel("Ao lançar um dado, a probabilidade de sair número par é:", ["1/2", "1/3", "1/6", "2/3"], 0),
+      (r) => {
+        const n = ri(r, 3, 7);
+        return numOptions(r, n * (n - 1) * (n - 2), `Quantos arranjos simples de 3 elementos existem em um grupo de ${n}?`);
+      },
     ]);
   }
   return pick([
@@ -236,6 +271,10 @@ function mathExercise(level: number, unit: number, r: Rng): Exercise {
       return numOptions(r, Math.round(c * (1 + i / 100)), `Um capital de R$ ${c} a ${i}% de juros simples por 1 ano gera montante de:`);
     },
     () => sel("A média de 4, 6, 8 e 10 é:", ["7", "6", "8", "9"], 0),
+    (r) => {
+      const z = { a: ri(r, 1, 5), b: ri(r, 1, 5) };
+      return numOptions(r, Math.sqrt(z.a * z.a + z.b * z.b), `Qual é o módulo do complexo ${z.a} + ${z.b}i?`);
+    },
   ]);
 }
 
@@ -549,7 +588,7 @@ export function exercisesForLesson(lessonId: string): Exercise[] {
     const seen = new Set<string>();
     let guard = 0;
     while (out.length < EXERCISES_PER_LESSON && guard++ < 200) {
-      const ex = mathExercise(grade.level, ref.unitIndex, r);
+      const ex = mathExercise(grade.level, ref.unitIndex, r, out.length);
       const key = ex.kind === "select" ? ex.prompt : JSON.stringify(ex);
       if (seen.has(key)) continue;
       seen.add(key);
@@ -574,7 +613,7 @@ export function examExercises(gradeId: string, subjectId: string, unitIndex: num
     const seen = new Set<string>();
     let guard = 0;
     while (out.length < EXAM_QUESTIONS && guard++ < 300) {
-      const ex = mathExercise(grade.level, unitIndex, r);
+      const ex = mathExercise(grade.level, unitIndex, r, out.length);
       const key = ex.kind === "select" ? ex.prompt : JSON.stringify(ex);
       if (seen.has(key)) continue;
       seen.add(key);
@@ -698,7 +737,7 @@ export function placementQuestions(gradeId: string): Exercise[] {
   const grade = getGrade(gradeId);
   const r = mulberry32(hash("placement:" + gradeId));
   const qs: Exercise[] = [];
-  for (let i = 0; i < 3; i++) qs.push(mathExercise(grade.level, 0, r));
+  for (let i = 0; i < 3; i++) qs.push(mathExercise(grade.level, 0, r, i));
   const por = shuffle(bankFor("portugues", grade.band), r).slice(0, 2);
   const other = shuffle(
     grade.band === "em" ? [...BIOLOGIA, ...HISTORIA.em!] : bankFor("ciencias", grade.band),

@@ -1,9 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Check, Crown, Heart, Infinity as InfinityIcon, Sparkles, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Check, Crown, Heart, Infinity as InfinityIcon, Sparkles, Zap, Loader2, ExternalLink } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { Mascot } from "@/components/Mascot";
 import { PREMIUM_PRICE_LABEL, useStore } from "@/lib/store";
+import { useServerFn } from "@tanstack/react-start";
+import { getPicPayLink, createPurchase, getLatestPurchase } from "@/lib/payments.functions";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/premium")({
   head: () => ({
@@ -34,11 +39,54 @@ const BENEFITS = [
 ];
 
 function Premium() {
-  const { state, ready, activatePremium, cancelPremium } = useStore();
+  const { state, ready, activatePremium, cancelPremium, syncPremium } = useStore();
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const [polling, setPolling] = useState(false);
+
+  const fetchLink = useServerFn(getPicPayLink);
+  const create = useServerFn(createPurchase);
+  const fetchLatest = useServerFn(getLatestPurchase);
+
+  const { data: picpay } = useQuery({
+    queryKey: ["picpay-link"],
+    queryFn: fetchLink,
+  });
+
+  const { data: latestPurchase, refetch: refetchLatest } = useQuery({
+    queryKey: ["latest-purchase"],
+    queryFn: fetchLatest,
+    enabled: !!user,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: async () => {
+      return create({ data: { provider: "picpay" } });
+    },
+    onSuccess: () => {
+      void refetchLatest();
+    },
+  });
+
+  useEffect(() => {
+    if (!polling) return;
+    const id = setInterval(() => {
+      void refetchLatest().then(({ data: purchase }) => {
+        if (purchase?.status === "approved") {
+          clearInterval(id);
+          setPolling(false);
+          void syncPremium();
+          navigate({ to: "/" });
+        }
+      });
+    }, 5000);
+    return () => clearInterval(id);
+  }, [polling, refetchLatest, syncPremium, navigate]);
+
   if (!ready) return <div className="min-h-screen bg-background" />;
 
   const isPremium = state.premium;
+  const pending = latestPurchase?.status === "pending";
 
   return (
     <div className="min-h-screen bg-background pb-28">
@@ -73,20 +121,51 @@ function Premium() {
           ))}
         </ul>
 
-        {!isPremium && (
+        {!isPremium && !pending && (
           <div className="mt-6 rounded-3xl border-2 border-primary/60 bg-primary/10 p-5 text-center">
             <p className="text-xs font-black uppercase tracking-widest text-primary">Plano Premium</p>
             <p className="mt-1 text-4xl font-black text-primary">{PREMIUM_PRICE_LABEL}</p>
-            <p className="text-sm font-bold text-muted-foreground">por mês · cancele quando quiser</p>
+            <p className="text-sm font-bold text-muted-foreground">pagamento único via PicPay</p>
             <button
-              onClick={() => {
-                activatePremium();
-                navigate({ to: "/" });
+              disabled={createMutation.isPending || !user}
+              onClick={async () => {
+                await createMutation.mutateAsync();
+                window.open(picpay?.link || "https://link.picpay.com/p/17875940486a8c854012968", "_blank");
+                setPolling(true);
               }}
-              className="btn-3d mt-4 w-full rounded-2xl border-2 border-primary/60 bg-primary px-4 py-4 text-base font-black uppercase tracking-wide text-primary-foreground"
+              className="btn-3d mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-primary/60 bg-primary px-4 py-4 text-base font-black uppercase tracking-wide text-primary-foreground disabled:opacity-60"
             >
-              Ativar Premium
+              {createMutation.isPending ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <>
+                  Pagar pelo PicPay <ExternalLink className="h-5 w-5" />
+                </>
+              )}
             </button>
+            {!user && (
+              <p className="mt-2 text-xs font-bold text-muted-foreground">
+                Faça login para ativar o Premium.
+              </p>
+            )}
+          </div>
+        )}
+
+        {!isPremium && pending && (
+          <div className="mt-6 rounded-3xl border-2 border-gem/50 bg-gem/10 p-5 text-center">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-gem" />
+            <p className="mt-3 font-black text-gem">Aguardando pagamento...</p>
+            <p className="text-sm font-bold text-muted-foreground">
+              Assim que o pagamento for confirmado, o Premium libera automaticamente.
+            </p>
+            <a
+              href={picpay?.link || "https://link.picpay.com/p/17875940486a8c854012968"}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-primary"
+            >
+              Abrir PicPay novamente <ExternalLink className="h-4 w-4" />
+            </a>
           </div>
         )}
 

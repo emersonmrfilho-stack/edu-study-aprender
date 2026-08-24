@@ -10,17 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as MateriasRouteImport } from './routes/materias'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PraticarRouteImport } from './routes/praticar'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
+import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
+import { Route as ApiPublicPicpayRouteImport } from './routes/api/public/picpay'
 import { Route as ProvaSubjectIdUnitIndexRouteImport } from './routes/prova.$subjectId.$unitIndex'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -53,6 +60,17 @@ const LicaoLessonIdRoute = LicaoLessonIdRouteImport.update({
   path: '/licao/$lessonId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminPagamentosRoute =
+  AuthenticatedAdminPagamentosRouteImport.update({
+    id: '/admin/pagamentos',
+    path: '/admin/pagamentos',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const ApiPublicPicpayRoute = ApiPublicPicpayRouteImport.update({
+  id: '/api/public/picpay',
+  path: '/api/public/picpay',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProvaSubjectIdUnitIndexRoute = ProvaSubjectIdUnitIndexRouteImport.update({
   id: '/prova/$subjectId/$unitIndex',
   path: '/prova/$subjectId/$unitIndex',
@@ -67,6 +85,8 @@ export interface FileRoutesByFullPath {
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
+  '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
+  '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
 export interface FileRoutesByTo {
@@ -77,17 +97,22 @@ export interface FileRoutesByTo {
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
+  '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
+  '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
+  '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
+  '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +125,8 @@ export interface FileRouteTypes {
     | '/praticar'
     | '/premium'
     | '/licao/$lessonId'
+    | '/admin/pagamentos'
+    | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,27 +137,34 @@ export interface FileRouteTypes {
     | '/praticar'
     | '/premium'
     | '/licao/$lessonId'
+    | '/admin/pagamentos'
+    | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/auth'
     | '/materias'
     | '/perfil'
     | '/praticar'
     | '/premium'
     | '/licao/$lessonId'
+    | '/_authenticated/admin/pagamentos'
+    | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
   MateriasRoute: typeof MateriasRoute
   PerfilRoute: typeof PerfilRoute
   PraticarRoute: typeof PraticarRoute
   PremiumRoute: typeof PremiumRoute
   LicaoLessonIdRoute: typeof LicaoLessonIdRoute
+  ApiPublicPicpayRoute: typeof ApiPublicPicpayRoute
   ProvaSubjectIdUnitIndexRoute: typeof ProvaSubjectIdUnitIndexRoute
 }
 
@@ -141,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -185,6 +226,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LicaoLessonIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/pagamentos': {
+      id: '/_authenticated/admin/pagamentos'
+      path: '/admin/pagamentos'
+      fullPath: '/admin/pagamentos'
+      preLoaderRoute: typeof AuthenticatedAdminPagamentosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/public/picpay': {
+      id: '/api/public/picpay'
+      path: '/api/public/picpay'
+      fullPath: '/api/public/picpay'
+      preLoaderRoute: typeof ApiPublicPicpayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/prova/$subjectId/$unitIndex': {
       id: '/prova/$subjectId/$unitIndex'
       path: '/prova/$subjectId/$unitIndex'
@@ -195,14 +250,28 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAdminPagamentosRoute: typeof AuthenticatedAdminPagamentosRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminPagamentosRoute: AuthenticatedAdminPagamentosRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
   MateriasRoute: MateriasRoute,
   PerfilRoute: PerfilRoute,
   PraticarRoute: PraticarRoute,
   PremiumRoute: PremiumRoute,
   LicaoLessonIdRoute: LicaoLessonIdRoute,
+  ApiPublicPicpayRoute: ApiPublicPicpayRoute,
   ProvaSubjectIdUnitIndexRoute: ProvaSubjectIdUnitIndexRoute,
 }
 export const routeTree = rootRouteImport

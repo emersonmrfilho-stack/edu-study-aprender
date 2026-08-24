@@ -19,7 +19,7 @@ export async function fetchRemoteState(userId: string): Promise<Partial<State> |
 export async function saveRemoteState(userId: string, state: State) {
   const { error } = await supabase
     .from("progress")
-    .upsert({ user_id: userId, state: state as unknown as Record<string, unknown> });
+    .upsert({ user_id: userId, state: state as unknown as import("@/integrations/supabase/types").Json });
   if (error) console.error("Erro ao salvar progresso na nuvem", error);
 }
 
