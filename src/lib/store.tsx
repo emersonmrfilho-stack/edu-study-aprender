@@ -9,6 +9,8 @@ import {
 } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchRemoteState, pickRicher, saveRemoteState } from "./sync";
+import { getLatestPurchase } from "./payments.functions";
+import type { Tables } from "@/integrations/supabase/types";
 
 export type Profile = {
   name: string;
@@ -78,6 +80,7 @@ type Ctx = {
   passExam: (key: string) => void;
   activatePremium: () => void;
   cancelPremium: () => void;
+  syncPremium: () => Promise<Tables<"premium_purchases"> | null>;
 };
 
 const StoreContext = createContext<Ctx | null>(null);
@@ -260,6 +263,22 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     () => setState((s) => ({ ...s, premium: false, premiumSince: null })),
     [],
   );
+
+  const syncPremium = useCallback(async () => {
+    const purchase = await getLatestPurchase({ data: undefined });
+    if (purchase?.status === "approved") {
+      setState((s) => ({
+        ...s,
+        premium: true,
+        premiumSince: s.premiumSince ?? new Date(purchase.approved_at || purchase.created_at).getTime(),
+        hearts: MAX_HEARTS,
+        heartsUpdatedAt: Date.now(),
+      }));
+    } else if (purchase?.status === "rejected") {
+      setState((s) => ({ ...s, premium: false, premiumSince: null }));
+    }
+    return purchase;
+  }, []);
 
   const reset = useCallback(() => {
     setState(EMPTY);
