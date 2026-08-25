@@ -41,14 +41,18 @@ const BENEFITS = [
 ];
 
 function Premium() {
-  const { state, ready, activatePremium, cancelPremium, syncPremium } = useStore();
+  const { state, ready, cancelPremium, syncPremium } = useStore();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [polling, setPolling] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const fetchLink = useServerFn(getPicPayLink);
   const create = useServerFn(createPurchase);
   const fetchLatest = useServerFn(getLatestPurchase);
+  const attach = useServerFn(attachReceipt);
 
   const { data: picpay } = useQuery({
     queryKey: ["picpay-link"],
@@ -70,8 +74,34 @@ function Premium() {
     },
   });
 
+  const isPremium = state.premium;
+  const pending = latestPurchase?.status === "pending";
+  const rejected = latestPurchase?.status === "rejected";
+
+  async function handleUpload(file: File) {
+    if (!user || !latestPurchase) return;
+    setUploadError(null);
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const path = `${user.id}/${latestPurchase.id}-${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from("comprovantes").upload(path, file, {
+        upsert: true,
+        contentType: file.type || undefined,
+      });
+      if (error) throw new Error(error.message);
+      await attach({ data: { purchaseId: latestPurchase.id, receiptPath: path } });
+      await refetchLatest();
+      setPolling(true);
+    } catch (e) {
+      setUploadError(e instanceof Error ? e.message : "Não foi possível enviar o comprovante.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
   useEffect(() => {
-    if (!polling) return;
+    if (!polling && !pending) return;
     const id = setInterval(() => {
       void refetchLatest().then(({ data: purchase }) => {
         if (purchase?.status === "approved") {
@@ -81,14 +111,12 @@ function Premium() {
           navigate({ to: "/" });
         }
       });
-    }, 5000);
+    }, 8000);
     return () => clearInterval(id);
-  }, [polling, refetchLatest, syncPremium, navigate]);
+  }, [polling, pending, refetchLatest, syncPremium, navigate]);
 
   if (!ready) return <div className="min-h-screen bg-background" />;
 
-  const isPremium = state.premium;
-  const pending = latestPurchase?.status === "pending";
 
   return (
     <div className="min-h-screen bg-background pb-28">
