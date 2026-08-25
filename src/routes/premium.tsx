@@ -178,16 +178,67 @@ function Premium() {
                 Faça login para ativar o Premium.
               </p>
             )}
+            <p className="mt-3 flex items-start gap-2 rounded-2xl border-2 border-border bg-card p-3 text-left text-xs font-bold text-muted-foreground">
+              <Clock className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={3} />
+              Após pagar, anexe o comprovante aqui. A liberação é feita por{" "}
+              <strong className="font-black">aprovação manual da nossa equipe</strong>, então pode
+              demorar um pouco (normalmente até 24h).
+            </p>
+            {rejected && (
+              <p className="mt-2 text-xs font-black text-wrong-foreground">
+                Seu último comprovante foi recusado. Envie um novo pagamento e comprovante válidos.
+              </p>
+            )}
           </div>
         )}
 
         {!isPremium && pending && (
           <div className="mt-6 rounded-3xl border-2 border-gem/50 bg-gem/10 p-5 text-center">
             <Loader2 className="mx-auto h-8 w-8 animate-spin text-gem" />
-            <p className="mt-3 font-black text-gem">Aguardando pagamento...</p>
-            <p className="text-sm font-bold text-muted-foreground">
-              Assim que o pagamento for confirmado, o Premium libera automaticamente.
+            <p className="mt-3 font-black text-gem">
+              {latestPurchase?.receipt_path ? "Comprovante em análise..." : "Aguardando comprovante"}
             </p>
+            <p className="text-sm font-bold text-muted-foreground">
+              {latestPurchase?.receipt_path
+                ? "Recebemos seu comprovante! A aprovação é manual, feita por uma pessoa da nossa equipe, e pode demorar um pouco (normalmente até 24h). Assim que aprovado, o Premium libera automaticamente."
+                : "Já pagou? Anexe o comprovante abaixo para que possamos conferir. A aprovação é manual e pode demorar um pouco."}
+            </p>
+
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*,application/pdf"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) void handleUpload(file);
+                e.target.value = "";
+              }}
+            />
+            <button
+              disabled={uploading}
+              onClick={() => fileRef.current?.click()}
+              className="btn-3d mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-primary/60 bg-primary px-4 py-4 text-sm font-black uppercase tracking-wide text-primary-foreground disabled:opacity-60"
+            >
+              {uploading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : latestPurchase?.receipt_path ? (
+                <>
+                  <FileCheck2 className="h-5 w-5" /> Enviar outro comprovante
+                </>
+              ) : (
+                <>
+                  <Upload className="h-5 w-5" /> Anexar comprovante
+                </>
+              )}
+            </button>
+            <p className="mt-2 text-xs font-bold text-muted-foreground">
+              Aceitamos imagem (print do PicPay) ou PDF, até 10 MB.
+            </p>
+            {uploadError && (
+              <p className="mt-2 text-xs font-black text-wrong-foreground">{uploadError}</p>
+            )}
+
             <a
               href={picpay?.link || "https://link.picpay.com/p/17875940486a8c854012968"}
               target="_blank"
@@ -198,6 +249,7 @@ function Premium() {
             </a>
           </div>
         )}
+
 
         {isPremium && (
           <div className="mt-6 grid gap-3">
