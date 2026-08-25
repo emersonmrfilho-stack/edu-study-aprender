@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 
-const PICPAY_LINK = "https://link.picpay.com/p/17875940486a8c854012968";
+const PICPAY_LINK = "https://link.picpay.com/p/17876661506a8d9ee6bbcca";
 const PREMIUM_AMOUNT = 24.9;
 
 export const getPicPayLink = createServerFn({ method: "GET" }).handler(async () => {

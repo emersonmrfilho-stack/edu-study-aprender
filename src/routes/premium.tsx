@@ -160,7 +160,7 @@ function Premium() {
               disabled={createMutation.isPending || !user}
               onClick={async () => {
                 await createMutation.mutateAsync();
-                window.open(picpay?.link || "https://link.picpay.com/p/17875940486a8c854012968", "_blank");
+                window.open(picpay?.link || "https://link.picpay.com/p/17876661506a8d9ee6bbcca", "_blank");
                 setPolling(true);
               }}
               className="btn-3d mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-primary/60 bg-primary px-4 py-4 text-base font-black uppercase tracking-wide text-primary-foreground disabled:opacity-60"
@@ -240,7 +240,7 @@ function Premium() {
             )}
 
             <a
-              href={picpay?.link || "https://link.picpay.com/p/17875940486a8c854012968"}
+              href={picpay?.link || "https://link.picpay.com/p/17876661506a8d9ee6bbcca"}
               target="_blank"
               rel="noreferrer"
               className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-primary"
