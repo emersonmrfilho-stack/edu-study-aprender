@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Check, X, Loader2, Crown, ArrowLeft } from "lucide-react";
-import { listPendingPurchases, approvePurchase } from "@/lib/payments.functions";
+import { Check, X, Loader2, Crown, ArrowLeft, FileText, FileWarning } from "lucide-react";
+import { listPendingPurchases, approvePurchase, getReceiptUrl } from "@/lib/payments.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { Mascot } from "@/components/Mascot";
 import type { Tables } from "@/integrations/supabase/types";
+
 
 export const Route = createFileRoute("/_authenticated/admin/pagamentos")({
   head: () => ({
