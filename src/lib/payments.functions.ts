@@ -100,3 +100,41 @@ export const listPendingPurchases = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return (data as Tables<"premium_purchases">[]) ?? [];
   });
+
+export const attachReceipt = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z
+      .object({
+        purchaseId: z.string().uuid(),
+        receiptPath: z.string().min(1),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    if (!data.receiptPath.startsWith(`${context.userId}/`)) {
+      throw new Error("Comprovante inválido.");
+    }
+    const update: TablesUpdate<"premium_purchases"> = { receipt_path: data.receiptPath };
+    const { data: row, error } = await context.supabase
+      .from("premium_purchases")
+      .update(update)
+      .eq("id", data.purchaseId)
+      .eq("user_id", context.userId)
+      .select()
+      .single();
+    if (error) throw new Error(error.message);
+    return row as Tables<"premium_purchases">;
+  });
+
+export const getReceiptUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => z.object({ receiptPath: z.string().min(1) }).parse(data))
+  .handler(async ({ data, context }) => {
+    const { data: signed, error } = await context.supabase.storage
+      .from("comprovantes")
+      .createSignedUrl(data.receiptPath, 60 * 10);
+    if (error) throw new Error(error.message);
+    return { url: signed.signedUrl };
+  });
+
