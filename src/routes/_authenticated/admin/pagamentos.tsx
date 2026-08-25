@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Check, X, Loader2, Crown, ArrowLeft } from "lucide-react";
-import { listPendingPurchases, approvePurchase } from "@/lib/payments.functions";
+import { Check, X, Loader2, Crown, ArrowLeft, FileText, FileWarning } from "lucide-react";
+import { listPendingPurchases, approvePurchase, getReceiptUrl } from "@/lib/payments.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { Mascot } from "@/components/Mascot";
 import type { Tables } from "@/integrations/supabase/types";
+
 
 export const Route = createFileRoute("/_authenticated/admin/pagamentos")({
   head: () => ({
@@ -83,7 +84,9 @@ function AdminPaymentsPage() {
                   </p>
                   <p className="mt-1 font-black">R$ {p.amount.toFixed(2).replace(".", ",")}</p>
                   <p className="text-xs font-bold text-muted-foreground">ID: {p.id}</p>
+                  <ReceiptLink receiptPath={p.receipt_path} />
                 </div>
+
                 <div className="flex gap-2">
                   <button
                     disabled={mutation.isPending}
@@ -108,3 +111,38 @@ function AdminPaymentsPage() {
     </div>
   );
 }
+
+function ReceiptLink({ receiptPath }: { receiptPath: string | null }) {
+  const signUrl = useServerFn(getReceiptUrl);
+  const { data, isLoading } = useQuery({
+    queryKey: ["receipt-url", receiptPath],
+    queryFn: () => signUrl({ data: { receiptPath: receiptPath! } }),
+    enabled: !!receiptPath,
+  });
+
+  if (!receiptPath) {
+    return (
+      <p className="mt-2 inline-flex items-center gap-1 text-xs font-black text-muted-foreground">
+        <FileWarning className="h-4 w-4" /> Sem comprovante anexado
+      </p>
+    );
+  }
+  if (isLoading || !data?.url) {
+    return (
+      <p className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-muted-foreground">
+        <Loader2 className="h-4 w-4 animate-spin" /> Carregando comprovante...
+      </p>
+    );
+  }
+  return (
+    <a
+      href={data.url}
+      target="_blank"
+      rel="noreferrer"
+      className="mt-2 inline-flex items-center gap-1 text-xs font-black text-primary underline"
+    >
+      <FileText className="h-4 w-4" /> Ver comprovante
+    </a>
+  );
+}
+
