@@ -84,7 +84,9 @@ function AdminPaymentsPage() {
                   </p>
                   <p className="mt-1 font-black">R$ {p.amount.toFixed(2).replace(".", ",")}</p>
                   <p className="text-xs font-bold text-muted-foreground">ID: {p.id}</p>
+                  <ReceiptLink receiptPath={p.receipt_path} />
                 </div>
+
                 <div className="flex gap-2">
                   <button
                     disabled={mutation.isPending}
