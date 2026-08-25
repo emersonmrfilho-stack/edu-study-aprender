@@ -23,6 +23,7 @@ export type Database = {
           external_id: string | null
           id: string
           provider: string
+          receipt_path: string | null
           status: Database["public"]["Enums"]["purchase_status"]
           updated_at: string
           user_id: string
@@ -35,6 +36,7 @@ export type Database = {
           external_id?: string | null
           id?: string
           provider?: string
+          receipt_path?: string | null
           status?: Database["public"]["Enums"]["purchase_status"]
           updated_at?: string
           user_id: string
@@ -47,6 +49,7 @@ export type Database = {
           external_id?: string | null
           id?: string
           provider?: string
+          receipt_path?: string | null
           status?: Database["public"]["Enums"]["purchase_status"]
           updated_at?: string
           user_id?: string
