@@ -87,7 +87,7 @@ function Premium() {
       const path = `${user.id}/${latestPurchase.id}-${Date.now()}.${ext}`;
       const { error } = await supabase.storage.from("comprovantes").upload(path, file, {
         upsert: true,
-        contentType: file.type || undefined,
+        contentType: file.type || "application/octet-stream",
       });
       if (error) throw new Error(error.message);
       await attach({ data: { purchaseId: latestPurchase.id, receiptPath: path } });
