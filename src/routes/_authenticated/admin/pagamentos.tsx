@@ -111,3 +111,38 @@ function AdminPaymentsPage() {
     </div>
   );
 }
+
+function ReceiptLink({ receiptPath }: { receiptPath: string | null }) {
+  const signUrl = useServerFn(getReceiptUrl);
+  const { data, isLoading } = useQuery({
+    queryKey: ["receipt-url", receiptPath],
+    queryFn: () => signUrl({ data: { receiptPath: receiptPath! } }),
+    enabled: !!receiptPath,
+  });
+
+  if (!receiptPath) {
+    return (
+      <p className="mt-2 inline-flex items-center gap-1 text-xs font-black text-muted-foreground">
+        <FileWarning className="h-4 w-4" /> Sem comprovante anexado
+      </p>
+    );
+  }
+  if (isLoading || !data?.url) {
+    return (
+      <p className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-muted-foreground">
+        <Loader2 className="h-4 w-4 animate-spin" /> Carregando comprovante...
+      </p>
+    );
+  }
+  return (
+    <a
+      href={data.url}
+      target="_blank"
+      rel="noreferrer"
+      className="mt-2 inline-flex items-center gap-1 text-xs font-black text-primary underline"
+    >
+      <FileText className="h-4 w-4" /> Ver comprovante
+    </a>
+  );
+}
+
