@@ -1,14 +1,16 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Check, Crown, Heart, Infinity as InfinityIcon, Sparkles, Zap, Loader2, ExternalLink } from "lucide-react";
+import { Check, Crown, Heart, Infinity as InfinityIcon, Sparkles, Zap, Loader2, ExternalLink, Upload, Clock, FileCheck2 } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { Mascot } from "@/components/Mascot";
 import { PREMIUM_PRICE_LABEL, useStore } from "@/lib/store";
 import { useServerFn } from "@tanstack/react-start";
-import { getPicPayLink, createPurchase, getLatestPurchase } from "@/lib/payments.functions";
+import { getPicPayLink, createPurchase, getLatestPurchase, attachReceipt } from "@/lib/payments.functions";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+
 
 export const Route = createFileRoute("/premium")({
   head: () => ({
