@@ -299,6 +299,28 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return purchase;
   }, []);
 
+  const claimChallenge = useCallback((id: string, reward: number) => {
+    let ok = false;
+    setState((s) => {
+      if (s.claimedChallenges.includes(id)) return s;
+      ok = true;
+      return { ...s, gems: s.gems + reward, claimedChallenges: [...s.claimedChallenges, id] };
+    });
+    return ok;
+  }, []);
+
+  const restoreStreak = useCallback(
+    () =>
+      setState((s) =>
+        s.lostStreak
+          ? { ...s, streak: s.lostStreak.value, lastStudyDay: today(), lostStreak: null }
+          : s,
+      ),
+    [],
+  );
+
+  const dropLostStreak = useCallback(() => setState((s) => ({ ...s, lostStreak: null })), []);
+
   const reset = useCallback(() => {
     setState(EMPTY);
     localStorage.removeItem(KEY);
