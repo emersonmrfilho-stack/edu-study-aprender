@@ -40,6 +40,7 @@ export type State = {
   currentSubject: string;
   achievements: string[]; // ids desbloqueados
   soundEnabled: boolean;
+  theme: "light" | "dark";
   examsPassed: Record<string, boolean>; // `${gradeId}-${subjectId}-${unitIndex}`
   premium: boolean;
   premiumSince: number | null;
@@ -63,6 +64,7 @@ const EMPTY: State = {
   currentSubject: "matematica",
   achievements: [],
   soundEnabled: true,
+  theme: "light",
   examsPassed: {},
   premium: false,
   premiumSince: null,
@@ -84,6 +86,8 @@ type Ctx = {
   reset: () => void;
   unlockAchievements: (ids: string[]) => string[];
   toggleSound: () => void;
+  setTheme: (t: "light" | "dark") => void;
+  toggleTheme: () => void;
   passExam: (key: string) => void;
   activatePremium: () => void;
   cancelPremium: () => void;
@@ -132,6 +136,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (!ready) return;
     localStorage.setItem(KEY, JSON.stringify(state));
   }, [state, ready]);
+
+  // Aplica o tema (claro/escuro) no documento.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.documentElement.classList.toggle("dark", state.theme === "dark");
+    document.documentElement.style.colorScheme = state.theme;
+  }, [state.theme]);
 
   // sessão: detecta login/logout e dispara a primeira sincronização
   useEffect(() => {
@@ -268,6 +279,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return unlocked;
   }, []);
 
+  const setTheme = useCallback(
+    (theme: "light" | "dark") => setState((s) => ({ ...s, theme })),
+    [],
+  );
+
+  const toggleTheme = useCallback(
+    () => setState((s) => ({ ...s, theme: s.theme === "dark" ? "light" : "dark" })),
+    [],
+  );
+
   const toggleSound = useCallback(
     () => setState((s) => ({ ...s, soundEnabled: !s.soundEnabled })),
     [],
@@ -350,6 +371,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       reset,
       unlockAchievements,
       toggleSound,
+      setTheme,
+      toggleTheme,
       passExam,
       activatePremium,
       cancelPremium,
@@ -369,6 +392,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       reset,
       unlockAchievements,
       toggleSound,
+      setTheme,
+      toggleTheme,
       passExam,
       activatePremium,
       cancelPremium,
