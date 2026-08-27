@@ -10,6 +10,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { fetchRemoteState, pickRicher, saveRemoteState } from "./sync";
 import { getLatestPurchase } from "./payments.functions";
+import { dayKey, type DayStats } from "./challenges";
 import type { Tables } from "@/integrations/supabase/types";
 
 export type Profile = {
