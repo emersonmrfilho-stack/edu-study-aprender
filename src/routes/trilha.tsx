@@ -50,7 +50,7 @@ function Trilha() {
   const units = unitsFor(grade.id, subjectId);
 
   return (
-    <div className="min-h-screen bg-background pb-28">
+    <div className="min-h-screen overflow-x-hidden bg-background pb-28">
       <TopBar />
 
       <div className="no-scrollbar sticky top-[49px] z-20 overflow-x-auto border-b border-border bg-background/90 backdrop-blur">
