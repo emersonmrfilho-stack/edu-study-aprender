@@ -10,10 +10,91 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.15"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
+      battles: {
+        Row: {
+          challenger_finished: boolean
+          challenger_id: string
+          challenger_score: number
+          created_at: string
+          grade_id: string
+          id: string
+          opponent_finished: boolean
+          opponent_id: string
+          opponent_score: number
+          question_count: number
+          seed: number
+          status: string
+          subject_id: string
+          updated_at: string
+          winner_id: string | null
+        }
+        Insert: {
+          challenger_finished?: boolean
+          challenger_id: string
+          challenger_score?: number
+          created_at?: string
+          grade_id?: string
+          id?: string
+          opponent_finished?: boolean
+          opponent_id: string
+          opponent_score?: number
+          question_count?: number
+          seed?: number
+          status?: string
+          subject_id?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Update: {
+          challenger_finished?: boolean
+          challenger_id?: string
+          challenger_score?: number
+          created_at?: string
+          grade_id?: string
+          id?: string
+          opponent_finished?: boolean
+          opponent_id?: string
+          opponent_score?: number
+          question_count?: number
+          seed?: number
+          status?: string
+          subject_id?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Relationships: []
+      }
+      friendships: {
+        Row: {
+          addressee_id: string
+          created_at: string
+          id: string
+          requester_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          addressee_id: string
+          created_at?: string
+          id?: string
+          requester_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          addressee_id?: string
+          created_at?: string
+          id?: string
+          requester_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       premium_purchases: {
         Row: {
           amount: number
@@ -53,6 +134,36 @@ export type Database = {
           status?: Database["public"]["Enums"]["purchase_status"]
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string
+          grade_id: string | null
+          updated_at: string
+          user_id: string
+          username: string
+          xp: number
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          grade_id?: string | null
+          updated_at?: string
+          user_id: string
+          username: string
+          xp?: number
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          grade_id?: string | null
+          updated_at?: string
+          user_id?: string
+          username?: string
+          xp?: number
         }
         Relationships: []
       }
