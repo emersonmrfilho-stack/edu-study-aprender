@@ -155,6 +155,13 @@ function Home() {
           <SectionTitle title="Atividades" />
           <div className="mt-3 grid grid-cols-2 gap-3">
             <ActionCard
+              to="/edu-ia"
+              icon={<Sparkles className="h-5 w-5" strokeWidth={3} />}
+              title="IA do Edu"
+              subtitle="Tire dúvidas"
+              tone="bg-accent/15 text-accent"
+            />
+            <ActionCard
               to="/praticar"
               icon={<Dumbbell className="h-5 w-5" strokeWidth={3} />}
               title="Praticar"
