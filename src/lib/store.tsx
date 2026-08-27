@@ -88,6 +88,9 @@ type Ctx = {
   activatePremium: () => void;
   cancelPremium: () => void;
   syncPremium: () => Promise<Tables<"premium_purchases"> | null>;
+  claimChallenge: (id: string, reward: number) => boolean;
+  restoreStreak: () => void;
+  dropLostStreak: () => void;
 };
 
 const StoreContext = createContext<Ctx | null>(null);
