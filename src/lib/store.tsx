@@ -225,6 +225,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       const d = today();
       const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
       const streak = s.lastStudyDay === d ? s.streak : s.lastStudyDay === yesterday ? s.streak + 1 : 1;
+      const dayStats = s.activity[d] ?? { lessons: 0, correct: 0, xp: 0 };
       const next = {
         ...s,
         xp: s.xp + xp,
@@ -232,6 +233,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         streak,
         lastStudyDay: d,
         completed: { ...s.completed, [lessonId]: Math.max(s.completed[lessonId] ?? 0, correct) },
+        activity: {
+          ...s.activity,
+          [d]: {
+            lessons: dayStats.lessons + 1,
+            correct: dayStats.correct + correct,
+            xp: dayStats.xp + xp,
+          },
+        },
       };
       const candidates: string[] = [];
       if (Object.keys(next.completed).length === 1) candidates.push("first-lesson");
