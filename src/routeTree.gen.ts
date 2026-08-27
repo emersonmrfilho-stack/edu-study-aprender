@@ -19,6 +19,7 @@ import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated/amigos'
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
 import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
+import { Route as AuthenticatedBatalhaBattleIdRouteImport } from './routes/_authenticated/batalha.$battleId'
 import { Route as ApiPublicPicpayRouteImport } from './routes/api/public/picpay'
 import { Route as ProvaSubjectIdUnitIndexRouteImport } from './routes/prova.$subjectId.$unitIndex'
 
@@ -72,6 +73,12 @@ const AuthenticatedAdminPagamentosRoute =
     path: '/admin/pagamentos',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedBatalhaBattleIdRoute =
+  AuthenticatedBatalhaBattleIdRouteImport.update({
+    id: '/batalha/$battleId',
+    path: '/batalha/$battleId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const ApiPublicPicpayRoute = ApiPublicPicpayRouteImport.update({
   id: '/api/public/picpay',
   path: '/api/public/picpay',
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
+  '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -106,6 +114,7 @@ export interface FileRoutesByTo {
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
+  '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -121,6 +130,7 @@ export interface FileRoutesById {
   '/_authenticated/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
+  '/_authenticated/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/amigos'
     | '/licao/$lessonId'
     | '/admin/pagamentos'
+    | '/batalha/$battleId'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   fileRoutesByTo: FileRoutesByTo
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/amigos'
     | '/licao/$lessonId'
     | '/admin/pagamentos'
+    | '/batalha/$battleId'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   id:
@@ -163,6 +175,7 @@ export interface FileRouteTypes {
     | '/_authenticated/amigos'
     | '/licao/$lessonId'
     | '/_authenticated/admin/pagamentos'
+    | '/_authenticated/batalha/$battleId'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   fileRoutesById: FileRoutesById
@@ -252,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPagamentosRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/batalha/$battleId': {
+      id: '/_authenticated/batalha/$battleId'
+      path: '/batalha/$battleId'
+      fullPath: '/batalha/$battleId'
+      preLoaderRoute: typeof AuthenticatedBatalhaBattleIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/api/public/picpay': {
       id: '/api/public/picpay'
       path: '/api/public/picpay'
@@ -272,11 +292,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedAmigosRoute: typeof AuthenticatedAmigosRoute
   AuthenticatedAdminPagamentosRoute: typeof AuthenticatedAdminPagamentosRoute
+  AuthenticatedBatalhaBattleIdRoute: typeof AuthenticatedBatalhaBattleIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAmigosRoute: AuthenticatedAmigosRoute,
   AuthenticatedAdminPagamentosRoute: AuthenticatedAdminPagamentosRoute,
+  AuthenticatedBatalhaBattleIdRoute: AuthenticatedBatalhaBattleIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
