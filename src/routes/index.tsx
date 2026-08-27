@@ -269,7 +269,7 @@ function ActionCard({
   subtitle,
   tone,
 }: {
-  to: LinkProps["to"];
+  to: NonNullable<LinkProps["to"]>;
   icon: React.ReactNode;
   title: string;
   subtitle: string;
