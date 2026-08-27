@@ -30,7 +30,7 @@ export function TopBar({ title }: { title?: string }) {
           {!state.premium && (
             <Link
               to="/premium"
-              className="press hidden items-center gap-1 rounded-full bg-gem/12 px-2 py-1 text-[11px] font-black uppercase text-gem xs:flex sm:flex"
+              className="press hidden items-center gap-1 rounded-full bg-gem/12 px-2 py-1 text-[11px] font-black uppercase text-gem sm:flex"
               aria-label="Assinar Premium"
             >
               <Crown className="h-4 w-4" strokeWidth={3} /> Premium
