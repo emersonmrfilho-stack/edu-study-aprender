@@ -66,6 +66,9 @@ const EMPTY: State = {
   examsPassed: {},
   premium: false,
   premiumSince: null,
+  activity: {},
+  claimedChallenges: [],
+  lostStreak: null,
 };
 
 const KEY = "edu-study-state-v2";
