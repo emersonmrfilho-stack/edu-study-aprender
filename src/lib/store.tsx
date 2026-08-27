@@ -42,6 +42,9 @@ export type State = {
   examsPassed: Record<string, boolean>; // `${gradeId}-${subjectId}-${unitIndex}`
   premium: boolean;
   premiumSince: number | null;
+  activity: Record<string, DayStats>; // dia ISO -> lições/acertos/xp
+  claimedChallenges: string[]; // ids de desafios já resgatados
+  lostStreak: { value: number; day: string } | null; // ofensiva perdida aguardando resgate
 };
 
 export const PREMIUM_PRICE_LABEL = "R$ 24,90";
