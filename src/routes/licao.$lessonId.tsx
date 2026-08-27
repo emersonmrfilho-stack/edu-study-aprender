@@ -292,6 +292,18 @@ function LessonPage() {
               {!checked && ex.explanation && (
                 <p className="mt-1 text-sm font-bold text-wrong-foreground/90">{ex.explanation}</p>
               )}
+              {!checked && (
+                <Link
+                  to="/edu-ia"
+                  search={{
+                    materia: ref.subjectId,
+                    q: `Errei esta questão de ${subject.name} do ${grade.label}: "${ex.prompt}". A resposta certa é "${correctAnswerText(ex, seed)}". Me explique passo a passo por que é essa e como não errar de novo.`,
+                  }}
+                  className="press mt-2 inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1.5 text-[11px] font-black uppercase tracking-wide text-primary"
+                >
+                  <Sparkles className="h-4 w-4" strokeWidth={3} /> Pedir ajuda ao Edu
+                </Link>
+              )}
             </div>
           )}
           <button
