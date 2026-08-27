@@ -16,6 +16,7 @@ import { Route as MateriasRouteImport } from './routes/materias'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PraticarRouteImport } from './routes/praticar'
 import { Route as PremiumRouteImport } from './routes/premium'
+import { Route as TrilhaRouteImport } from './routes/trilha'
 import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated/amigos'
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
 import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
@@ -55,6 +56,11 @@ const PraticarRoute = PraticarRouteImport.update({
 const PremiumRoute = PremiumRouteImport.update({
   id: '/premium',
   path: '/premium',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrilhaRoute = TrilhaRouteImport.update({
+  id: '/trilha',
+  path: '/trilha',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAmigosRoute = AuthenticatedAmigosRouteImport.update({
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
+  '/trilha': typeof TrilhaRoute
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
+  '/trilha': typeof TrilhaRoute
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
+  '/trilha': typeof TrilhaRoute
   '/_authenticated/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
@@ -143,6 +152,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/praticar'
     | '/premium'
+    | '/trilha'
     | '/amigos'
     | '/licao/$lessonId'
     | '/admin/pagamentos'
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/praticar'
     | '/premium'
+    | '/trilha'
     | '/amigos'
     | '/licao/$lessonId'
     | '/admin/pagamentos'
@@ -172,6 +183,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/praticar'
     | '/premium'
+    | '/trilha'
     | '/_authenticated/amigos'
     | '/licao/$lessonId'
     | '/_authenticated/admin/pagamentos'
@@ -188,6 +200,7 @@ export interface RootRouteChildren {
   PerfilRoute: typeof PerfilRoute
   PraticarRoute: typeof PraticarRoute
   PremiumRoute: typeof PremiumRoute
+  TrilhaRoute: typeof TrilhaRoute
   LicaoLessonIdRoute: typeof LicaoLessonIdRoute
   ApiPublicPicpayRoute: typeof ApiPublicPicpayRoute
   ProvaSubjectIdUnitIndexRoute: typeof ProvaSubjectIdUnitIndexRoute
@@ -242,6 +255,13 @@ declare module '@tanstack/react-router' {
       path: '/premium'
       fullPath: '/premium'
       preLoaderRoute: typeof PremiumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trilha': {
+      id: '/trilha'
+      path: '/trilha'
+      fullPath: '/trilha'
+      preLoaderRoute: typeof TrilhaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/amigos': {
@@ -313,6 +333,7 @@ const rootRouteChildren: RootRouteChildren = {
   PerfilRoute: PerfilRoute,
   PraticarRoute: PraticarRoute,
   PremiumRoute: PremiumRoute,
+  TrilhaRoute: TrilhaRoute,
   LicaoLessonIdRoute: LicaoLessonIdRoute,
   ApiPublicPicpayRoute: ApiPublicPicpayRoute,
   ProvaSubjectIdUnitIndexRoute: ProvaSubjectIdUnitIndexRoute,
