@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as DesafiosRouteImport } from './routes/desafios'
 import { Route as EduIaRouteImport } from './routes/edu-ia'
 import { Route as MateriasRouteImport } from './routes/materias'
 import { Route as PerfilRouteImport } from './routes/perfil'
@@ -39,6 +40,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesafiosRoute = DesafiosRouteImport.update({
+  id: '/desafios',
+  path: '/desafios',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EduIaRoute = EduIaRouteImport.update({
@@ -117,6 +123,7 @@ const ProvaSubjectIdUnitIndexRoute = ProvaSubjectIdUnitIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/desafios': typeof DesafiosRoute
   '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/desafios': typeof DesafiosRoute
   '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/desafios': typeof DesafiosRoute
   '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
@@ -175,6 +184,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/desafios'
     | '/edu-ia'
     | '/materias'
     | '/perfil'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/desafios'
     | '/edu-ia'
     | '/materias'
     | '/perfil'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/desafios'
     | '/edu-ia'
     | '/materias'
     | '/perfil'
@@ -232,6 +244,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  DesafiosRoute: typeof DesafiosRoute
   EduIaRoute: typeof EduIaRoute
   MateriasRoute: typeof MateriasRoute
   PerfilRoute: typeof PerfilRoute
@@ -266,6 +279,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/desafios': {
+      id: '/desafios'
+      path: '/desafios'
+      fullPath: '/desafios'
+      preLoaderRoute: typeof DesafiosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/edu-ia': {
@@ -389,6 +409,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  DesafiosRoute: DesafiosRoute,
   EduIaRoute: EduIaRoute,
   MateriasRoute: MateriasRoute,
   PerfilRoute: PerfilRoute,
