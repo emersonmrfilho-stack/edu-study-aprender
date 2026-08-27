@@ -22,6 +22,7 @@ import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
 import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
 import { Route as AuthenticatedBatalhaBattleIdRouteImport } from './routes/_authenticated/batalha.$battleId'
+import { Route as ApiEduChatRouteImport } from './routes/api/edu/chat'
 import { Route as ApiPublicPicpayRouteImport } from './routes/api/public/picpay'
 import { Route as ProvaSubjectIdUnitIndexRouteImport } from './routes/prova.$subjectId.$unitIndex'
 
@@ -91,6 +92,11 @@ const AuthenticatedBatalhaBattleIdRoute =
     path: '/batalha/$battleId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const ApiEduChatRoute = ApiEduChatRouteImport.update({
+  id: '/api/edu/chat',
+  path: '/api/edu/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPicpayRoute = ApiPublicPicpayRouteImport.update({
   id: '/api/public/picpay',
   path: '/api/public/picpay',
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
+  '/api/edu/chat': typeof ApiEduChatRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
+  '/api/edu/chat': typeof ApiEduChatRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/_authenticated/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
+  '/api/edu/chat': typeof ApiEduChatRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/licao/$lessonId'
     | '/admin/pagamentos'
     | '/batalha/$battleId'
+    | '/api/edu/chat'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   fileRoutesByTo: FileRoutesByTo
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/licao/$lessonId'
     | '/admin/pagamentos'
     | '/batalha/$battleId'
+    | '/api/edu/chat'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   id:
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/licao/$lessonId'
     | '/_authenticated/admin/pagamentos'
     | '/_authenticated/batalha/$battleId'
+    | '/api/edu/chat'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   fileRoutesById: FileRoutesById
@@ -215,6 +227,7 @@ export interface RootRouteChildren {
   RankingRoute: typeof RankingRoute
   TrilhaRoute: typeof TrilhaRoute
   LicaoLessonIdRoute: typeof LicaoLessonIdRoute
+  ApiEduChatRoute: typeof ApiEduChatRoute
   ApiPublicPicpayRoute: typeof ApiPublicPicpayRoute
   ProvaSubjectIdUnitIndexRoute: typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -312,6 +325,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBatalhaBattleIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/edu/chat': {
+      id: '/api/edu/chat'
+      path: '/api/edu/chat'
+      fullPath: '/api/edu/chat'
+      preLoaderRoute: typeof ApiEduChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/picpay': {
       id: '/api/public/picpay'
       path: '/api/public/picpay'
@@ -356,6 +376,7 @@ const rootRouteChildren: RootRouteChildren = {
   RankingRoute: RankingRoute,
   TrilhaRoute: TrilhaRoute,
   LicaoLessonIdRoute: LicaoLessonIdRoute,
+  ApiEduChatRoute: ApiEduChatRoute,
   ApiPublicPicpayRoute: ApiPublicPicpayRoute,
   ProvaSubjectIdUnitIndexRoute: ProvaSubjectIdUnitIndexRoute,
 }
