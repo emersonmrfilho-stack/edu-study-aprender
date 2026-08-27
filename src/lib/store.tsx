@@ -188,6 +188,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return () => clearInterval(id);
   }, [ready]);
 
+  // detecta ofensiva perdida (não estudou ontem nem hoje) e guarda para resgate
+  useEffect(() => {
+    if (!ready) return;
+    setState((s) => {
+      if (s.streak <= 0 || !s.lastStudyDay || s.lostStreak) return s;
+      const d = dayKey();
+      const yesterday = dayKey(new Date(Date.now() - 86400000));
+      if (s.lastStudyDay === d || s.lastStudyDay === yesterday) return s;
+      return { ...s, streak: 0, lostStreak: { value: s.streak, day: s.lastStudyDay } };
+    });
+  }, [ready]);
+
   const setProfile = useCallback((p: Profile) => setState((s) => ({ ...s, profile: p })), []);
   const setSubject = useCallback((sub: string) => setState((s) => ({ ...s, currentSubject: sub })), []);
   const loseHeart = useCallback(
@@ -342,6 +354,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       activatePremium,
       cancelPremium,
       syncPremium,
+      claimChallenge,
+      restoreStreak,
+      dropLostStreak,
     }),
     [
       state,
@@ -358,6 +373,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       activatePremium,
       cancelPremium,
       syncPremium,
+      claimChallenge,
+      restoreStreak,
+      dropLostStreak,
     ],
   );
 
