@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, type LinkProps } from "@tanstack/react-router";
-import { ChevronRight, Crown, Dumbbell, Flame, Play, Swords, Trophy, Zap } from "lucide-react";
+import { ChevronRight, Crown, Dumbbell, Flame, Play, Sparkles, Swords, Trophy, Zap } from "lucide-react";
 import { Onboarding } from "@/components/Onboarding";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
