@@ -12,12 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as DesafiosRouteImport } from './routes/desafios'
 import { Route as EduIaRouteImport } from './routes/edu-ia'
 import { Route as MateriasRouteImport } from './routes/materias'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PraticarRouteImport } from './routes/praticar'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as RankingRouteImport } from './routes/ranking'
+import { Route as RecuperarOfensivaRouteImport } from './routes/recuperar-ofensiva'
 import { Route as TrilhaRouteImport } from './routes/trilha'
 import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated/amigos'
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
@@ -39,6 +41,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesafiosRoute = DesafiosRouteImport.update({
+  id: '/desafios',
+  path: '/desafios',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EduIaRoute = EduIaRouteImport.update({
@@ -69,6 +76,11 @@ const PremiumRoute = PremiumRouteImport.update({
 const RankingRoute = RankingRouteImport.update({
   id: '/ranking',
   path: '/ranking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecuperarOfensivaRoute = RecuperarOfensivaRouteImport.update({
+  id: '/recuperar-ofensiva',
+  path: '/recuperar-ofensiva',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrilhaRoute = TrilhaRouteImport.update({
@@ -117,12 +129,14 @@ const ProvaSubjectIdUnitIndexRoute = ProvaSubjectIdUnitIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/desafios': typeof DesafiosRoute
   '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
   '/ranking': typeof RankingRoute
+  '/recuperar-ofensiva': typeof RecuperarOfensivaRoute
   '/trilha': typeof TrilhaRoute
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
@@ -135,12 +149,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/desafios': typeof DesafiosRoute
   '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
   '/ranking': typeof RankingRoute
+  '/recuperar-ofensiva': typeof RecuperarOfensivaRoute
   '/trilha': typeof TrilhaRoute
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
@@ -155,12 +171,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/desafios': typeof DesafiosRoute
   '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
   '/ranking': typeof RankingRoute
+  '/recuperar-ofensiva': typeof RecuperarOfensivaRoute
   '/trilha': typeof TrilhaRoute
   '/_authenticated/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
@@ -175,12 +193,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/desafios'
     | '/edu-ia'
     | '/materias'
     | '/perfil'
     | '/praticar'
     | '/premium'
     | '/ranking'
+    | '/recuperar-ofensiva'
     | '/trilha'
     | '/amigos'
     | '/licao/$lessonId'
@@ -193,12 +213,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/desafios'
     | '/edu-ia'
     | '/materias'
     | '/perfil'
     | '/praticar'
     | '/premium'
     | '/ranking'
+    | '/recuperar-ofensiva'
     | '/trilha'
     | '/amigos'
     | '/licao/$lessonId'
@@ -212,12 +234,14 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/desafios'
     | '/edu-ia'
     | '/materias'
     | '/perfil'
     | '/praticar'
     | '/premium'
     | '/ranking'
+    | '/recuperar-ofensiva'
     | '/trilha'
     | '/_authenticated/amigos'
     | '/licao/$lessonId'
@@ -232,12 +256,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  DesafiosRoute: typeof DesafiosRoute
   EduIaRoute: typeof EduIaRoute
   MateriasRoute: typeof MateriasRoute
   PerfilRoute: typeof PerfilRoute
   PraticarRoute: typeof PraticarRoute
   PremiumRoute: typeof PremiumRoute
   RankingRoute: typeof RankingRoute
+  RecuperarOfensivaRoute: typeof RecuperarOfensivaRoute
   TrilhaRoute: typeof TrilhaRoute
   LicaoLessonIdRoute: typeof LicaoLessonIdRoute
   ApiEduChatRoute: typeof ApiEduChatRoute
@@ -266,6 +292,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/desafios': {
+      id: '/desafios'
+      path: '/desafios'
+      fullPath: '/desafios'
+      preLoaderRoute: typeof DesafiosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/edu-ia': {
@@ -308,6 +341,13 @@ declare module '@tanstack/react-router' {
       path: '/ranking'
       fullPath: '/ranking'
       preLoaderRoute: typeof RankingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recuperar-ofensiva': {
+      id: '/recuperar-ofensiva'
+      path: '/recuperar-ofensiva'
+      fullPath: '/recuperar-ofensiva'
+      preLoaderRoute: typeof RecuperarOfensivaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/trilha': {
@@ -389,12 +429,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  DesafiosRoute: DesafiosRoute,
   EduIaRoute: EduIaRoute,
   MateriasRoute: MateriasRoute,
   PerfilRoute: PerfilRoute,
   PraticarRoute: PraticarRoute,
   PremiumRoute: PremiumRoute,
   RankingRoute: RankingRoute,
+  RecuperarOfensivaRoute: RecuperarOfensivaRoute,
   TrilhaRoute: TrilhaRoute,
   LicaoLessonIdRoute: LicaoLessonIdRoute,
   ApiEduChatRoute: ApiEduChatRoute,

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 const items = [
   { to: "/", label: "Início", Icon: Home, match: ["/"] },
-  { to: "/materias", label: "Estudos", Icon: BookOpen, match: ["/materias", "/trilha", "/praticar"] },
+  { to: "/materias", label: "Estudos", Icon: BookOpen, match: ["/materias", "/trilha", "/praticar", "/edu-ia", "/desafios"] },
   { to: "/ranking", label: "Ranking", Icon: Trophy, match: ["/ranking", "/amigos"] },
   { to: "/perfil", label: "Perfil", Icon: User, match: ["/perfil", "/premium"] },
 ] as const;

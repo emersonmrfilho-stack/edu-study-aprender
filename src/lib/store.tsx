@@ -10,6 +10,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { fetchRemoteState, pickRicher, saveRemoteState } from "./sync";
 import { getLatestPurchase } from "./payments.functions";
+import { dayKey, type DayStats } from "./challenges";
 import type { Tables } from "@/integrations/supabase/types";
 
 export type Profile = {
@@ -42,6 +43,9 @@ export type State = {
   examsPassed: Record<string, boolean>; // `${gradeId}-${subjectId}-${unitIndex}`
   premium: boolean;
   premiumSince: number | null;
+  activity: Record<string, DayStats>; // dia ISO -> lições/acertos/xp
+  claimedChallenges: string[]; // ids de desafios já resgatados
+  lostStreak: { value: number; day: string } | null; // ofensiva perdida aguardando resgate
 };
 
 export const PREMIUM_PRICE_LABEL = "R$ 24,90";
@@ -62,6 +66,9 @@ const EMPTY: State = {
   examsPassed: {},
   premium: false,
   premiumSince: null,
+  activity: {},
+  claimedChallenges: [],
+  lostStreak: null,
 };
 
 const KEY = "edu-study-state-v2";
@@ -81,6 +88,9 @@ type Ctx = {
   activatePremium: () => void;
   cancelPremium: () => void;
   syncPremium: () => Promise<Tables<"premium_purchases"> | null>;
+  claimChallenge: (id: string, reward: number) => boolean;
+  restoreStreak: () => void;
+  dropLostStreak: () => void;
 };
 
 const StoreContext = createContext<Ctx | null>(null);
@@ -178,6 +188,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return () => clearInterval(id);
   }, [ready]);
 
+  // detecta ofensiva perdida (não estudou ontem nem hoje) e guarda para resgate
+  useEffect(() => {
+    if (!ready) return;
+    setState((s) => {
+      if (s.streak <= 0 || !s.lastStudyDay || s.lostStreak) return s;
+      const d = dayKey();
+      const yesterday = dayKey(new Date(Date.now() - 86400000));
+      if (s.lastStudyDay === d || s.lastStudyDay === yesterday) return s;
+      return { ...s, streak: 0, lostStreak: { value: s.streak, day: s.lastStudyDay } };
+    });
+  }, [ready]);
+
   const setProfile = useCallback((p: Profile) => setState((s) => ({ ...s, profile: p })), []);
   const setSubject = useCallback((sub: string) => setState((s) => ({ ...s, currentSubject: sub })), []);
   const loseHeart = useCallback(
@@ -215,6 +237,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       const d = today();
       const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
       const streak = s.lastStudyDay === d ? s.streak : s.lastStudyDay === yesterday ? s.streak + 1 : 1;
+      const dayStats = s.activity[d] ?? { lessons: 0, correct: 0, xp: 0 };
       const next = {
         ...s,
         xp: s.xp + xp,
@@ -222,6 +245,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         streak,
         lastStudyDay: d,
         completed: { ...s.completed, [lessonId]: Math.max(s.completed[lessonId] ?? 0, correct) },
+        activity: {
+          ...s.activity,
+          [d]: {
+            lessons: dayStats.lessons + 1,
+            correct: dayStats.correct + correct,
+            xp: dayStats.xp + xp,
+          },
+        },
       };
       const candidates: string[] = [];
       if (Object.keys(next.completed).length === 1) candidates.push("first-lesson");
@@ -280,6 +311,28 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return purchase;
   }, []);
 
+  const claimChallenge = useCallback((id: string, reward: number) => {
+    let ok = false;
+    setState((s) => {
+      if (s.claimedChallenges.includes(id)) return s;
+      ok = true;
+      return { ...s, gems: s.gems + reward, claimedChallenges: [...s.claimedChallenges, id] };
+    });
+    return ok;
+  }, []);
+
+  const restoreStreak = useCallback(
+    () =>
+      setState((s) =>
+        s.lostStreak
+          ? { ...s, streak: s.lostStreak.value, lastStudyDay: today(), lostStreak: null }
+          : s,
+      ),
+    [],
+  );
+
+  const dropLostStreak = useCallback(() => setState((s) => ({ ...s, lostStreak: null })), []);
+
   const reset = useCallback(() => {
     setState(EMPTY);
     localStorage.removeItem(KEY);
@@ -301,6 +354,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       activatePremium,
       cancelPremium,
       syncPremium,
+      claimChallenge,
+      restoreStreak,
+      dropLostStreak,
     }),
     [
       state,
@@ -317,6 +373,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       activatePremium,
       cancelPremium,
       syncPremium,
+      claimChallenge,
+      restoreStreak,
+      dropLostStreak,
     ],
   );
 
