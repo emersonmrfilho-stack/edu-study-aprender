@@ -58,7 +58,7 @@ function Materias() {
                 <button
                   onClick={() => {
                     setSubject(s.id);
-                    navigate({ to: "/" });
+                    navigate({ to: "/trilha" });
                   }}
                   className="btn-3d w-full rounded-2xl border-2 border-border bg-card p-4 text-left"
                 >
