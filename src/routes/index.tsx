@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, type LinkProps } from "@tanstack/react-router";
 import { ChevronRight, Crown, Dumbbell, Flame, Play, Swords, Trophy, Zap } from "lucide-react";
 import { Onboarding } from "@/components/Onboarding";
 import { TopBar } from "@/components/TopBar";
@@ -269,7 +269,7 @@ function ActionCard({
   subtitle,
   tone,
 }: {
-  to: string;
+  to: LinkProps["to"];
   icon: React.ReactNode;
   title: string;
   subtitle: string;
