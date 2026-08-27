@@ -87,7 +87,7 @@ function Trilha() {
               <p className="text-lg font-black leading-tight">{unit.title}</p>
             </div>
 
-            <div className="flex flex-col items-center gap-4 py-6">
+            <div className="flex flex-col items-center gap-4 overflow-x-clip py-6">
               {unit.lessons.map((lesson, i) => {
                 const status = lessonStatus(state, grade.id, subjectId, unit.index, i);
                 const offset = [0, 40, 58, 40, 0, -40, -58, -40][i % 8];
