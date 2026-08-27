@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Heart, X, Volume2, VolumeX } from "lucide-react";
+import { Heart, X, Volume2, VolumeX, Sparkles } from "lucide-react";
 import { ExerciseBody, canCheckExercise, evaluateExercise } from "@/components/ExerciseBody";
 import { Mascot, SpeechBubble } from "@/components/Mascot";
 import { SUBJECTS, getGrade, parseLessonId } from "@/lib/curriculum";
