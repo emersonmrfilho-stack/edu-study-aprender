@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, type LinkProps } from "@tanstack/react-router";
-import { ChevronRight, Crown, Dumbbell, Flame, Play, Sparkles, Swords, Trophy, Zap } from "lucide-react";
+import { ChevronRight, Crown, Dumbbell, Flame, Play, Sparkles, Swords, Target, Trophy, Zap } from "lucide-react";
 import { Onboarding } from "@/components/Onboarding";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
@@ -154,6 +154,13 @@ function Home() {
         <section className="animate-rise">
           <SectionTitle title="Atividades" />
           <div className="mt-3 grid grid-cols-2 gap-3">
+            <ActionCard
+              to="/desafios"
+              icon={<Target className="h-5 w-5" strokeWidth={3} />}
+              title="Desafios"
+              subtitle="Metas e gemas"
+              tone="bg-streak/12 text-streak"
+            />
             <ActionCard
               to="/edu-ia"
               icon={<Sparkles className="h-5 w-5" strokeWidth={3} />}

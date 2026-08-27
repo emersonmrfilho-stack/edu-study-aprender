@@ -19,6 +19,7 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PraticarRouteImport } from './routes/praticar'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as RankingRouteImport } from './routes/ranking'
+import { Route as RecuperarOfensivaRouteImport } from './routes/recuperar-ofensiva'
 import { Route as TrilhaRouteImport } from './routes/trilha'
 import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated/amigos'
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
@@ -77,6 +78,11 @@ const RankingRoute = RankingRouteImport.update({
   path: '/ranking',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecuperarOfensivaRoute = RecuperarOfensivaRouteImport.update({
+  id: '/recuperar-ofensiva',
+  path: '/recuperar-ofensiva',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrilhaRoute = TrilhaRouteImport.update({
   id: '/trilha',
   path: '/trilha',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
   '/ranking': typeof RankingRoute
+  '/recuperar-ofensiva': typeof RecuperarOfensivaRoute
   '/trilha': typeof TrilhaRoute
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
   '/ranking': typeof RankingRoute
+  '/recuperar-ofensiva': typeof RecuperarOfensivaRoute
   '/trilha': typeof TrilhaRoute
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
   '/ranking': typeof RankingRoute
+  '/recuperar-ofensiva': typeof RecuperarOfensivaRoute
   '/trilha': typeof TrilhaRoute
   '/_authenticated/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/praticar'
     | '/premium'
     | '/ranking'
+    | '/recuperar-ofensiva'
     | '/trilha'
     | '/amigos'
     | '/licao/$lessonId'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/praticar'
     | '/premium'
     | '/ranking'
+    | '/recuperar-ofensiva'
     | '/trilha'
     | '/amigos'
     | '/licao/$lessonId'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/praticar'
     | '/premium'
     | '/ranking'
+    | '/recuperar-ofensiva'
     | '/trilha'
     | '/_authenticated/amigos'
     | '/licao/$lessonId'
@@ -251,6 +263,7 @@ export interface RootRouteChildren {
   PraticarRoute: typeof PraticarRoute
   PremiumRoute: typeof PremiumRoute
   RankingRoute: typeof RankingRoute
+  RecuperarOfensivaRoute: typeof RecuperarOfensivaRoute
   TrilhaRoute: typeof TrilhaRoute
   LicaoLessonIdRoute: typeof LicaoLessonIdRoute
   ApiEduChatRoute: typeof ApiEduChatRoute
@@ -328,6 +341,13 @@ declare module '@tanstack/react-router' {
       path: '/ranking'
       fullPath: '/ranking'
       preLoaderRoute: typeof RankingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recuperar-ofensiva': {
+      id: '/recuperar-ofensiva'
+      path: '/recuperar-ofensiva'
+      fullPath: '/recuperar-ofensiva'
+      preLoaderRoute: typeof RecuperarOfensivaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/trilha': {
@@ -416,6 +436,7 @@ const rootRouteChildren: RootRouteChildren = {
   PraticarRoute: PraticarRoute,
   PremiumRoute: PremiumRoute,
   RankingRoute: RankingRoute,
+  RecuperarOfensivaRoute: RecuperarOfensivaRoute,
   TrilhaRoute: TrilhaRoute,
   LicaoLessonIdRoute: LicaoLessonIdRoute,
   ApiEduChatRoute: ApiEduChatRoute,
