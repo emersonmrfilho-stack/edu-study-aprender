@@ -16,6 +16,7 @@ import { Route as MateriasRouteImport } from './routes/materias'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PraticarRouteImport } from './routes/praticar'
 import { Route as PremiumRouteImport } from './routes/premium'
+import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated/amigos'
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
 import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
 import { Route as ApiPublicPicpayRouteImport } from './routes/api/public/picpay'
@@ -55,6 +56,11 @@ const PremiumRoute = PremiumRouteImport.update({
   path: '/premium',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAmigosRoute = AuthenticatedAmigosRouteImport.update({
+  id: '/amigos',
+  path: '/amigos',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const LicaoLessonIdRoute = LicaoLessonIdRouteImport.update({
   id: '/licao/$lessonId',
   path: '/licao/$lessonId',
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
+  '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
+  '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
   '/premium': typeof PremiumRoute
+  '/_authenticated/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/praticar'
     | '/premium'
+    | '/amigos'
     | '/licao/$lessonId'
     | '/admin/pagamentos'
     | '/api/public/picpay'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/praticar'
     | '/premium'
+    | '/amigos'
     | '/licao/$lessonId'
     | '/admin/pagamentos'
     | '/api/public/picpay'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/praticar'
     | '/premium'
+    | '/_authenticated/amigos'
     | '/licao/$lessonId'
     | '/_authenticated/admin/pagamentos'
     | '/api/public/picpay'
@@ -219,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PremiumRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/amigos': {
+      id: '/_authenticated/amigos'
+      path: '/amigos'
+      fullPath: '/amigos'
+      preLoaderRoute: typeof AuthenticatedAmigosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/licao/$lessonId': {
       id: '/licao/$lessonId'
       path: '/licao/$lessonId'
@@ -251,10 +270,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAmigosRoute: typeof AuthenticatedAmigosRoute
   AuthenticatedAdminPagamentosRoute: typeof AuthenticatedAdminPagamentosRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAmigosRoute: AuthenticatedAmigosRoute,
   AuthenticatedAdminPagamentosRoute: AuthenticatedAdminPagamentosRoute,
 }
 
