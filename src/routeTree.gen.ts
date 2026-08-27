@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as EduIaRouteImport } from './routes/edu-ia'
 import { Route as MateriasRouteImport } from './routes/materias'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PraticarRouteImport } from './routes/praticar'
@@ -38,6 +39,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EduIaRoute = EduIaRouteImport.update({
+  id: '/edu-ia',
+  path: '/edu-ia',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MateriasRoute = MateriasRouteImport.update({
@@ -111,6 +117,7 @@ const ProvaSubjectIdUnitIndexRoute = ProvaSubjectIdUnitIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/edu-ia'
     | '/materias'
     | '/perfil'
     | '/praticar'
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/edu-ia'
     | '/materias'
     | '/perfil'
     | '/praticar'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/edu-ia'
     | '/materias'
     | '/perfil'
     | '/praticar'
@@ -220,6 +232,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  EduIaRoute: typeof EduIaRoute
   MateriasRoute: typeof MateriasRoute
   PerfilRoute: typeof PerfilRoute
   PraticarRoute: typeof PraticarRoute
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/edu-ia': {
+      id: '/edu-ia'
+      path: '/edu-ia'
+      fullPath: '/edu-ia'
+      preLoaderRoute: typeof EduIaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/materias': {
@@ -369,6 +389,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  EduIaRoute: EduIaRoute,
   MateriasRoute: MateriasRoute,
   PerfilRoute: PerfilRoute,
   PraticarRoute: PraticarRoute,
