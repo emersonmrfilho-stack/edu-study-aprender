@@ -173,6 +173,25 @@ export function playError(enabled: boolean) {
   tone(180, "square", 0.16, 0.11, 0.05);
 }
 
+/** Vitória na batalha. */
+export function playVictory(enabled: boolean) {
+  if (!enabled) return;
+  tone(523.25, "triangle", 0.14, 0, 0.12);
+  tone(659.25, "triangle", 0.14, 0.13, 0.12);
+  tone(783.99, "triangle", 0.14, 0.26, 0.12);
+  tone(1046.5, "triangle", 0.5, 0.39, 0.15);
+  tone(1318.5, "sine", 0.6, 0.45, 0.1);
+  noise(0.4, 0.4, 0.05);
+}
+
+/** Derrota na batalha. */
+export function playDefeat(enabled: boolean) {
+  if (!enabled) return;
+  tone(392, "sawtooth", 0.22, 0, 0.09);
+  tone(330, "sawtooth", 0.22, 0.2, 0.09);
+  tone(262, "sawtooth", 0.5, 0.4, 0.09, 160);
+}
+
 export const SFX = {
   click: playClick,
   select: playSelect,
@@ -191,6 +210,8 @@ export const SFX = {
   send: playSend,
   receive: playReceive,
   error: playError,
+  victory: playVictory,
+  defeat: playDefeat,
 } as const;
 
 export type SfxName = keyof typeof SFX;
