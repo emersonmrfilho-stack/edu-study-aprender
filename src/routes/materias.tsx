@@ -29,7 +29,7 @@ function Materias() {
   const subjects = subjectsForGrade(grade.id);
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-28">
       <TopBar />
       <main className="mx-auto max-w-2xl px-4 py-6">
         <h1 className="text-2xl font-black">Minhas matérias</h1>
@@ -41,7 +41,7 @@ function Materias() {
         <select
           value={grade.id}
           onChange={(e) => setProfile({ ...state.profile!, gradeId: e.target.value })}
-          className="mt-2 w-full rounded-2xl border-2 border-border bg-card px-4 py-3 text-base font-extrabold"
+          className="mt-2 w-full rounded-2xl border border-border bg-card px-4 py-3 text-base font-extrabold shadow-soft"
         >
           {GRADES.map((g) => (
             <option key={g.id} value={g.id}>
@@ -60,7 +60,7 @@ function Materias() {
                     setSubject(s.id);
                     navigate({ to: "/trilha" });
                   }}
-                  className="btn-3d w-full rounded-2xl border-2 border-border bg-card p-4 text-left"
+                  className="press lift card-soft w-full p-4 text-left"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl" aria-hidden>
