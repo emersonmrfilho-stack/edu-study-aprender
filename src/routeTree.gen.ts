@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as EduIaRouteImport } from './routes/edu-ia'
 import { Route as MateriasRouteImport } from './routes/materias'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PraticarRouteImport } from './routes/praticar'
@@ -22,6 +23,7 @@ import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
 import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
 import { Route as AuthenticatedBatalhaBattleIdRouteImport } from './routes/_authenticated/batalha.$battleId'
+import { Route as ApiEduChatRouteImport } from './routes/api/edu/chat'
 import { Route as ApiPublicPicpayRouteImport } from './routes/api/public/picpay'
 import { Route as ProvaSubjectIdUnitIndexRouteImport } from './routes/prova.$subjectId.$unitIndex'
 
@@ -37,6 +39,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EduIaRoute = EduIaRouteImport.update({
+  id: '/edu-ia',
+  path: '/edu-ia',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MateriasRoute = MateriasRouteImport.update({
@@ -91,6 +98,11 @@ const AuthenticatedBatalhaBattleIdRoute =
     path: '/batalha/$battleId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const ApiEduChatRoute = ApiEduChatRouteImport.update({
+  id: '/api/edu/chat',
+  path: '/api/edu/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPicpayRoute = ApiPublicPicpayRouteImport.update({
   id: '/api/public/picpay',
   path: '/api/public/picpay',
@@ -105,6 +117,7 @@ const ProvaSubjectIdUnitIndexRoute = ProvaSubjectIdUnitIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
@@ -115,12 +128,14 @@ export interface FileRoutesByFullPath {
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
+  '/api/edu/chat': typeof ApiEduChatRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
@@ -131,6 +146,7 @@ export interface FileRoutesByTo {
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
+  '/api/edu/chat': typeof ApiEduChatRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -139,6 +155,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/edu-ia': typeof EduIaRoute
   '/materias': typeof MateriasRoute
   '/perfil': typeof PerfilRoute
   '/praticar': typeof PraticarRoute
@@ -149,6 +166,7 @@ export interface FileRoutesById {
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/_authenticated/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
+  '/api/edu/chat': typeof ApiEduChatRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -157,6 +175,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/edu-ia'
     | '/materias'
     | '/perfil'
     | '/praticar'
@@ -167,12 +186,14 @@ export interface FileRouteTypes {
     | '/licao/$lessonId'
     | '/admin/pagamentos'
     | '/batalha/$battleId'
+    | '/api/edu/chat'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/edu-ia'
     | '/materias'
     | '/perfil'
     | '/praticar'
@@ -183,6 +204,7 @@ export interface FileRouteTypes {
     | '/licao/$lessonId'
     | '/admin/pagamentos'
     | '/batalha/$battleId'
+    | '/api/edu/chat'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   id:
@@ -190,6 +212,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/edu-ia'
     | '/materias'
     | '/perfil'
     | '/praticar'
@@ -200,6 +223,7 @@ export interface FileRouteTypes {
     | '/licao/$lessonId'
     | '/_authenticated/admin/pagamentos'
     | '/_authenticated/batalha/$battleId'
+    | '/api/edu/chat'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
   fileRoutesById: FileRoutesById
@@ -208,6 +232,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  EduIaRoute: typeof EduIaRoute
   MateriasRoute: typeof MateriasRoute
   PerfilRoute: typeof PerfilRoute
   PraticarRoute: typeof PraticarRoute
@@ -215,6 +240,7 @@ export interface RootRouteChildren {
   RankingRoute: typeof RankingRoute
   TrilhaRoute: typeof TrilhaRoute
   LicaoLessonIdRoute: typeof LicaoLessonIdRoute
+  ApiEduChatRoute: typeof ApiEduChatRoute
   ApiPublicPicpayRoute: typeof ApiPublicPicpayRoute
   ProvaSubjectIdUnitIndexRoute: typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -240,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/edu-ia': {
+      id: '/edu-ia'
+      path: '/edu-ia'
+      fullPath: '/edu-ia'
+      preLoaderRoute: typeof EduIaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/materias': {
@@ -312,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBatalhaBattleIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/edu/chat': {
+      id: '/api/edu/chat'
+      path: '/api/edu/chat'
+      fullPath: '/api/edu/chat'
+      preLoaderRoute: typeof ApiEduChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/picpay': {
       id: '/api/public/picpay'
       path: '/api/public/picpay'
@@ -349,6 +389,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  EduIaRoute: EduIaRoute,
   MateriasRoute: MateriasRoute,
   PerfilRoute: PerfilRoute,
   PraticarRoute: PraticarRoute,
@@ -356,6 +397,7 @@ const rootRouteChildren: RootRouteChildren = {
   RankingRoute: RankingRoute,
   TrilhaRoute: TrilhaRoute,
   LicaoLessonIdRoute: LicaoLessonIdRoute,
+  ApiEduChatRoute: ApiEduChatRoute,
   ApiPublicPicpayRoute: ApiPublicPicpayRoute,
   ProvaSubjectIdUnitIndexRoute: ProvaSubjectIdUnitIndexRoute,
 }
