@@ -37,7 +37,7 @@ function Praticar() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-28">
       <TopBar />
       <main className="mx-auto max-w-2xl px-4 py-6">
         <div className="flex items-start gap-3">
@@ -51,7 +51,7 @@ function Praticar() {
             <li key={s.id}>
               <button
                 onClick={() => practice(s.id)}
-                className="btn-3d flex w-full items-center gap-3 rounded-2xl border-2 border-border bg-card px-4 py-4 text-left"
+                className="press lift card-soft flex w-full items-center gap-3 px-4 py-4 text-left"
               >
                 <span
                   className="flex h-11 w-11 items-center justify-center rounded-xl text-xl"
@@ -70,7 +70,7 @@ function Praticar() {
           ))}
         </ul>
 
-        <div className="mt-8 rounded-2xl border-2 border-border bg-muted p-5">
+        <div className="mt-8 rounded-3xl border border-border bg-muted p-5">
           <div className="flex items-center gap-2 font-black">
             <Dumbbell className="h-5 w-5 text-primary" strokeWidth={3} /> Dica do Edu
           </div>

@@ -58,7 +58,7 @@ function Perfil() {
   ];
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-28">
       <TopBar />
       <main className="mx-auto max-w-2xl px-4 py-6">
         <div className="flex items-center gap-4">
@@ -72,7 +72,7 @@ function Perfil() {
 
         <ul className="mt-6 grid grid-cols-2 gap-3">
           {stats.map(({ Icon, label, value, color }) => (
-            <li key={label} className="rounded-2xl border-2 border-border bg-card p-4">
+            <li key={label} className="card-soft p-4">
               <Icon className={`h-6 w-6 ${color}`} strokeWidth={3} />
               <p className="mt-2 text-2xl font-black">{value}</p>
               <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">{label}</p>
@@ -82,7 +82,7 @@ function Perfil() {
 
         <Link
           to="/premium"
-          className="mt-6 flex items-center gap-3 rounded-2xl border-2 border-gem/50 bg-gem/10 p-4"
+          className="press lift mt-6 flex items-center gap-3 rounded-3xl border-2 border-gem/40 bg-gem/10 p-4"
         >
           <Crown className="h-7 w-7 shrink-0 text-gem" strokeWidth={3} />
           <div>
@@ -98,7 +98,7 @@ function Perfil() {
         </Link>
 
         {authLoading ? null : user ? (
-          <div className="mt-4 rounded-2xl border-2 border-border bg-card p-4">
+          <div className="mt-4 card-soft p-4">
             <div className="flex items-center gap-3">
               <CloudCheck className="h-7 w-7 shrink-0 text-correct-foreground" strokeWidth={3} />
               <div className="min-w-0">

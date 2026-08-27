@@ -313,3 +313,19 @@ export const submitBattleScore = createServerFn({ method: "POST" })
     if (uErr) throw new Error(uErr.message);
     return updated as Tables<"battles">;
   });
+
+/** Ranking geral por XP (top 50). */
+export const getLeaderboard = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("profiles")
+      .select("user_id, username, display_name, grade_id, xp")
+      .order("xp", { ascending: false })
+      .limit(50);
+    if (error) throw new Error(error.message);
+    return {
+      me: context.userId,
+      rows: (data as PublicProfile[]) ?? [],
+    };
+  });
