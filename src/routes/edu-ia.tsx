@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-type Search = { q?: string; materia?: string };
+type Search = { q?: string | undefined; materia?: string | undefined };
 
 export const Route = createFileRoute("/edu-ia")({
   validateSearch: (search: Record<string, unknown>): Search => ({
