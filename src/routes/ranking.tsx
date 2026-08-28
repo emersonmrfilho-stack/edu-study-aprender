@@ -91,7 +91,7 @@ function Ranking() {
             <EmptyState
               title="O ranking está vazio"
               description="Seja o primeiro! Complete lições para ganhar XP e ocupar o topo da lista."
-              emoji="🏆"
+              icon={<Trophy className="h-8 w-8" strokeWidth={2.5} />}
             />
           ) : (
             <ul className="grid gap-2">
