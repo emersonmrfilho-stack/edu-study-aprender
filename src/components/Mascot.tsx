@@ -1,23 +1,31 @@
-import eduMascot from "@/assets/edu-mascot.png";
+import { avatarSrc } from "@/lib/avatars";
+import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export function Mascot({
   className,
   size = 140,
   priority = false,
+  avatarId,
+  src,
 }: {
   className?: string;
   size?: number;
   priority?: boolean;
+  /** Força um avatar específico (ex.: o do adversário na batalha). */
+  avatarId?: string | null;
+  src?: string;
 }) {
+  const { state } = useStore();
+  const finalSrc = src ?? avatarSrc(avatarId ?? state.avatarId);
   return (
     <img
-      src={eduMascot}
+      src={finalSrc}
       alt="Edu, o macaco mascote do Edu Study"
       width={size}
       height={size}
       loading={priority ? "eager" : "lazy"}
-      className={cn("select-none", className)}
+      className={cn("select-none object-contain", className)}
       style={{ width: size, height: size }}
     />
   );
