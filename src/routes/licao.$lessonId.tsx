@@ -147,7 +147,7 @@ function LessonPage() {
 
         <main className="mx-auto w-full max-w-2xl flex-1 px-4 pb-40">
           <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">
-            {subject.emoji} {subject.name} · {grade.short} · {ref.unitTitle}
+            {subject.name} · {grade.short} · {ref.unitTitle}
           </p>
           <div className="mt-4 flex items-start gap-3">
             <Mascot size={72} />
@@ -242,7 +242,7 @@ function LessonPage() {
 
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 pb-52">
         <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">
-          {subject.emoji} {subject.name} · {grade.short} · {ref.unitTitle}
+          {subject.name} · {grade.short} · {ref.unitTitle}
         </p>
         <div className="mt-4 flex items-start gap-3">
           <Mascot size={72} />
@@ -287,7 +287,7 @@ function LessonPage() {
                   checked ? "text-correct-foreground" : "text-wrong-foreground",
                 )}
               >
-                {checked ? "Muito bem! 🎉" : `Resposta certa: ${correctAnswerText(ex, seed)}`}
+                {checked ? "Muito bem!" : `Resposta certa: ${correctAnswerText(ex, seed)}`}
               </p>
               {!checked && ex.explanation && (
                 <p className="mt-1 text-sm font-bold text-wrong-foreground/90">{ex.explanation}</p>

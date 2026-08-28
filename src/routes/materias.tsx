@@ -63,8 +63,15 @@ function Materias() {
                   className="press lift card-soft w-full p-4 text-left"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl" aria-hidden>
-                      {s.emoji}
+                    <span
+                      className="flex h-11 w-11 items-center justify-center rounded-xl"
+                      style={{
+                        backgroundColor: `color-mix(in oklab, var(--${s.color}) 18%, transparent)`,
+                        color: `var(--${s.color})`,
+                      }}
+                      aria-hidden
+                    >
+                      <SubjectIcon subjectId={s.id} className="h-5 w-5" />
                     </span>
                     <div className="flex-1">
                       <p className="text-base font-black">{s.name}</p>

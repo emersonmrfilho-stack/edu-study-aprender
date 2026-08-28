@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { AlertTriangle } from "lucide-react";
 import { Mascot } from "@/components/Mascot";
 import { cn } from "@/lib/utils";
 
@@ -46,18 +47,18 @@ export function EmptyState({
   title,
   description,
   action,
-  emoji,
+  icon,
 }: {
   title: string;
   description: string;
   action?: ReactNode;
-  emoji?: string;
+  icon?: ReactNode;
 }) {
   return (
     <div className="card-soft flex flex-col items-center gap-3 px-6 py-10 text-center animate-rise">
-      {emoji ? (
-        <span className="text-4xl" aria-hidden>
-          {emoji}
+      {icon ? (
+        <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary" aria-hidden>
+          {icon}
         </span>
       ) : (
         <Mascot size={96} className="animate-float" />
@@ -81,9 +82,7 @@ export function ErrorState({
 }) {
   return (
     <div className="rounded-3xl border-2 border-destructive/30 bg-destructive/8 px-6 py-8 text-center animate-rise">
-      <span className="text-3xl" aria-hidden>
-        🙈
-      </span>
+      <AlertTriangle className="mx-auto h-8 w-8 text-destructive" strokeWidth={2.5} aria-hidden />
       <p className="mt-2 text-base font-black text-destructive">{title}</p>
       <p className="mt-1 text-sm font-bold text-muted-foreground">{description}</p>
       {onRetry && (

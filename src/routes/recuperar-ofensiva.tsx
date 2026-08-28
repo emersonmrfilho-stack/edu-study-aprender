@@ -112,7 +112,7 @@ function Rescue() {
         <Mascot size={150} className="animate-float" priority />
         <SpeechBubble>
           {won
-            ? `Boa! Você acertou ${correct} de ${exercises.length} e recuperou sua ofensiva de ${lost.value} dias. 🔥`
+            ? `Boa! Você acertou ${correct} de ${exercises.length} e recuperou sua ofensiva de ${lost.value} dias.`
             : `Você acertou ${correct} de ${exercises.length}. Dessa vez a ofensiva se perdeu, mas hoje começa uma nova!`}
         </SpeechBubble>
         <Link
@@ -182,7 +182,7 @@ function Rescue() {
                 checked ? "text-correct-foreground" : "text-wrong-foreground",
               )}
             >
-              {checked ? "Isso aí! 🎉" : `Resposta certa: ${correctAnswerText(ex, seed)}`}
+              {checked ? "Isso aí!" : `Resposta certa: ${correctAnswerText(ex, seed)}`}
             </p>
           )}
           <button

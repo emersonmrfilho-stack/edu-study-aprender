@@ -118,11 +118,11 @@ function Home() {
             className="press lift card-soft mt-3 flex w-full items-center gap-3 p-4 text-left"
           >
             <span
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl shadow-soft"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-primary-foreground shadow-soft"
               style={{ backgroundColor: `var(--${subject.color})` }}
               aria-hidden
             >
-              {subject.emoji}
+              <SubjectIcon subjectId={subject.id} className="h-7 w-7" strokeWidth={2.5} />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-base font-black">{subject.name}</span>
@@ -223,11 +223,14 @@ function Home() {
                     className="press lift card-soft flex h-full w-full flex-col items-start gap-2 p-3.5 text-left"
                   >
                     <span
-                      className="flex h-10 w-10 items-center justify-center rounded-xl text-lg"
-                      style={{ backgroundColor: `color-mix(in oklab, var(--${s.color}) 18%, transparent)` }}
+                      className="flex h-10 w-10 items-center justify-center rounded-xl"
+                      style={{
+                        backgroundColor: `color-mix(in oklab, var(--${s.color}) 18%, transparent)`,
+                        color: `var(--${s.color})`,
+                      }}
                       aria-hidden
                     >
-                      {s.emoji}
+                      <SubjectIcon subjectId={s.id} className="h-5 w-5" />
                     </span>
                     <span className="line-clamp-2 text-sm font-black leading-tight">{s.name}</span>
                     <span className="text-[11px] font-bold text-muted-foreground">

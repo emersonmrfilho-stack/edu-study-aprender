@@ -39,7 +39,7 @@ export function Onboarding() {
           <Mascot size={200} priority />
           <h1 className="text-3xl font-black tracking-tight text-primary">Edu Study</h1>
           <p className="max-w-sm text-base font-bold text-muted-foreground">
-            Oi! Eu sou o Edu 🐒 Vou te ensinar todas as matérias da escola, do 1º ano até o 3º ano do
+            Oi! Eu sou o Edu. Vou te ensinar todas as matérias da escola, do 1º ano até o 3º ano do
             Ensino Médio — de um jeito divertido.
           </p>
           <PrimaryButton onClick={() => setStep("name")}>Começar</PrimaryButton>

@@ -32,23 +32,22 @@ export function getGrade(id: string): Grade {
 export type Subject = {
   id: string;
   name: string;
-  emoji: string;
   color: string; // css var name in styles.css
 };
 
 export const SUBJECTS: Record<string, Subject> = {
-  matematica: { id: "matematica", name: "Matemática", emoji: "🔢", color: "subject-math" },
-  portugues: { id: "portugues", name: "Português", emoji: "📚", color: "subject-lang" },
-  ciencias: { id: "ciencias", name: "Ciências", emoji: "🔬", color: "subject-science" },
-  historia: { id: "historia", name: "História", emoji: "🏛️", color: "subject-history" },
-  geografia: { id: "geografia", name: "Geografia", emoji: "🌎", color: "subject-geo" },
-  ingles: { id: "ingles", name: "Inglês", emoji: "🇬🇧", color: "subject-english" },
-  fisica: { id: "fisica", name: "Física", emoji: "🧲", color: "subject-physics" },
-  quimica: { id: "quimica", name: "Química", emoji: "⚗️", color: "subject-chem" },
-  biologia: { id: "biologia", name: "Biologia", emoji: "🧬", color: "subject-bio" },
-  literatura: { id: "literatura", name: "Literatura", emoji: "✒️", color: "subject-lit" },
-  filosofia: { id: "filosofia", name: "Filosofia", emoji: "🤔", color: "subject-phil" },
-  sociologia: { id: "sociologia", name: "Sociologia", emoji: "👥", color: "subject-socio" },
+  matematica: { id: "matematica", name: "Matemática", color: "subject-math" },
+  portugues: { id: "portugues", name: "Português", color: "subject-lang" },
+  ciencias: { id: "ciencias", name: "Ciências", color: "subject-science" },
+  historia: { id: "historia", name: "História", color: "subject-history" },
+  geografia: { id: "geografia", name: "Geografia", color: "subject-geo" },
+  ingles: { id: "ingles", name: "Inglês", color: "subject-english" },
+  fisica: { id: "fisica", name: "Física", color: "subject-physics" },
+  quimica: { id: "quimica", name: "Química", color: "subject-chem" },
+  biologia: { id: "biologia", name: "Biologia", color: "subject-bio" },
+  literatura: { id: "literatura", name: "Literatura", color: "subject-lit" },
+  filosofia: { id: "filosofia", name: "Filosofia", color: "subject-phil" },
+  sociologia: { id: "sociologia", name: "Sociologia", color: "subject-socio" },
 };
 
 export function subjectsForGrade(gradeId: string): Subject[] {

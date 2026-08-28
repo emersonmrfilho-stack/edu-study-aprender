@@ -54,11 +54,11 @@ function Praticar() {
                 className="press lift card-soft flex w-full items-center gap-3 px-4 py-4 text-left"
               >
                 <span
-                  className="flex h-11 w-11 items-center justify-center rounded-xl text-xl"
+                  className="flex h-11 w-11 items-center justify-center rounded-xl text-primary-foreground"
                   style={{ backgroundColor: `var(--${s.color})` }}
                   aria-hidden
                 >
-                  {s.emoji}
+                  <SubjectIcon subjectId={s.id} className="h-5 w-5" />
                 </span>
                 <div className="flex-1">
                   <p className="font-black">{s.name}</p>

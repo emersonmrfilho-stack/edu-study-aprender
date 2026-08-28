@@ -171,7 +171,14 @@ function Perfil() {
                   )}
                 >
                   <div className="flex items-start gap-3">
-                    <span className="text-3xl" aria-hidden>{a.icon}</span>
+                    <span
+                      className={cn(
+                        "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl",
+                        isUnlocked ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground",
+                      )}
+                    >
+                      <AchievementIcon id={a.id} />
+                    </span>
                     <div>
                       <p className={cn("font-black", isUnlocked ? "text-primary" : "text-muted-foreground")}>
                         {a.title}

@@ -64,7 +64,7 @@ function Trilha() {
                 s.id === subjectId && "border-transparent bg-primary text-primary-foreground shadow-soft",
               )}
             >
-              <span aria-hidden>{s.emoji}</span>
+              <SubjectIcon subjectId={s.id} className="h-4 w-4" />
               {s.name}
             </button>
           ))}
