@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchRemoteState, pickRicher, saveRemoteState } from "./sync";
 import { getLatestPurchase } from "./payments.functions";
 import { dayKey, type DayStats } from "./challenges";
+import { DEFAULT_AVATAR_ID } from "./avatars";
 import type { Tables } from "@/integrations/supabase/types";
 
 export type Profile = {
@@ -47,6 +48,8 @@ export type State = {
   activity: Record<string, DayStats>; // dia ISO -> lições/acertos/xp
   claimedChallenges: string[]; // ids de desafios já resgatados
   lostStreak: { value: number; day: string } | null; // ofensiva perdida aguardando resgate
+  avatarId: string; // foto de perfil do Edu em uso
+  ownedAvatars: string[]; // fotos compradas na loja
 };
 
 export const PREMIUM_PRICE_LABEL = "R$ 24,90";
@@ -71,6 +74,8 @@ const EMPTY: State = {
   activity: {},
   claimedChallenges: [],
   lostStreak: null,
+  avatarId: DEFAULT_AVATAR_ID,
+  ownedAvatars: [DEFAULT_AVATAR_ID],
 };
 
 const KEY = "edu-study-state-v2";
@@ -95,6 +100,8 @@ type Ctx = {
   claimChallenge: (id: string, reward: number) => boolean;
   restoreStreak: () => void;
   dropLostStreak: () => void;
+  buyAvatar: (id: string, price: number) => boolean;
+  selectAvatar: (id: string) => void;
 };
 
 const StoreContext = createContext<Ctx | null>(null);
@@ -114,7 +121,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (!remote) return; // conta nova: o efeito de salvamento envia o progresso local
     setState((local) =>
       pickRicher(local, remote)
-        ? { ...EMPTY, ...remote, soundEnabled: remote.soundEnabled ?? true }
+        ? {
+            ...EMPTY,
+            ...remote,
+            soundEnabled: remote.soundEnabled ?? true,
+            avatarId: remote.avatarId ?? DEFAULT_AVATAR_ID,
+            ownedAvatars: remote.ownedAvatars?.length ? remote.ownedAvatars : [DEFAULT_AVATAR_ID],
+          }
         : local,
     );
   }, []);
@@ -124,7 +137,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       const raw = localStorage.getItem(KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as State;
-        setState({ ...EMPTY, ...parsed, soundEnabled: parsed.soundEnabled ?? true });
+        setState({
+          ...EMPTY,
+          ...parsed,
+          soundEnabled: parsed.soundEnabled ?? true,
+          avatarId: parsed.avatarId ?? DEFAULT_AVATAR_ID,
+          ownedAvatars: parsed.ownedAvatars?.length ? parsed.ownedAvatars : [DEFAULT_AVATAR_ID],
+        });
       }
     } catch {
       /* ignore */
@@ -352,6 +371,27 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const buyAvatar = useCallback((id: string, price: number) => {
+    let ok = false;
+    setState((s) => {
+      if (s.ownedAvatars.includes(id) || s.gems < price) return s;
+      ok = true;
+      return {
+        ...s,
+        gems: s.gems - price,
+        ownedAvatars: [...s.ownedAvatars, id],
+        avatarId: id,
+      };
+    });
+    return ok;
+  }, []);
+
+  const selectAvatar = useCallback(
+    (id: string) =>
+      setState((s) => (s.ownedAvatars.includes(id) ? { ...s, avatarId: id } : s)),
+    [],
+  );
+
   const dropLostStreak = useCallback(() => setState((s) => ({ ...s, lostStreak: null })), []);
 
   const reset = useCallback(() => {
@@ -380,6 +420,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       claimChallenge,
       restoreStreak,
       dropLostStreak,
+      buyAvatar,
+      selectAvatar,
     }),
     [
       state,
@@ -401,6 +443,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       claimChallenge,
       restoreStreak,
       dropLostStreak,
+      buyAvatar,
+      selectAvatar,
     ],
   );
 
