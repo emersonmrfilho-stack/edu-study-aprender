@@ -162,6 +162,7 @@ function ExamPage() {
         <div className="mt-4 flex items-start gap-3">
           <Mascot size={72} />
           <SpeechBubble>{ex.prompt}</SpeechBubble>
+          <SpeakButton text={ex.prompt} />
         </div>
 
         {ex.image && (
