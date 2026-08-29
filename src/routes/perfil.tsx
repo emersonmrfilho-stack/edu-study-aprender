@@ -144,6 +144,19 @@ function Perfil() {
           </Link>
         )}
 
+        <Link
+          to="/loja"
+          className="press lift mt-4 flex items-center gap-3 rounded-3xl border-2 border-accent/40 bg-accent/10 p-4"
+        >
+          <ShoppingBag className="h-7 w-7 shrink-0 text-accent" strokeWidth={3} />
+          <div>
+            <p className="font-black text-accent">Loja de gemas</p>
+            <p className="text-sm font-bold text-muted-foreground">
+              Troque suas gemas por novas fotos de perfil do Edu.
+            </p>
+          </div>
+        </Link>
+
         <div className="mt-4 grid gap-3">
           <button
             onClick={() => refillHearts()}
@@ -158,6 +171,13 @@ function Perfil() {
           >
             {state.soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
             Som {state.soundEnabled ? "ligado" : "desligado"}
+          </button>
+          <button
+            onClick={toggleTheme}
+            className="btn-3d flex items-center justify-center gap-2 rounded-2xl border-2 border-border bg-card px-4 py-4 text-sm font-black uppercase tracking-wide text-foreground"
+          >
+            {state.theme === "dark" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            Tema {state.theme === "dark" ? "escuro" : "claro"}
           </button>
           <button
             onClick={() => {
