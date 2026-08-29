@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Heart, X, Volume2, VolumeX } from "lucide-react";
 import { ExerciseBody, canCheckExercise, evaluateExercise } from "@/components/ExerciseBody";
 import { Mascot, SpeechBubble } from "@/components/Mascot";
+import { SpeakButton } from "@/components/SpeakButton";
 import { SUBJECTS, getGrade, unitsFor } from "@/lib/curriculum";
 import { correctAnswerText, examExercises } from "@/lib/questions";
 import { playAchievement, playCorrect, playWrong } from "@/lib/sound";
@@ -162,6 +163,7 @@ function ExamPage() {
         <div className="mt-4 flex items-start gap-3">
           <Mascot size={72} />
           <SpeechBubble>{ex.prompt}</SpeechBubble>
+          <SpeakButton text={ex.prompt} />
         </div>
 
         {ex.image && (
