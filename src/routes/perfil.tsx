@@ -1,10 +1,25 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Cloud, CloudCheck, Crown, Flame, Gem, Heart, LogOut, Trophy, Volume2, VolumeX } from "lucide-react";
+import {
+  Cloud,
+  CloudCheck,
+  Crown,
+  Flame,
+  Gem,
+  Heart,
+  LogOut,
+  Moon,
+  ShoppingBag,
+  Sun,
+  Trophy,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { Mascot } from "@/components/Mascot";
+import { AchievementIcon } from "@/components/AchievementIcon";
 import { ACHIEVEMENTS } from "@/lib/achievements";
 import { getGrade } from "@/lib/curriculum";
 import { useStore } from "@/lib/store";
