@@ -43,7 +43,7 @@ export const Route = createFileRoute("/perfil")({
 });
 
 function Perfil() {
-  const { state, ready, refillHearts, reset, toggleSound } = useStore();
+  const { state, ready, refillHearts, reset, toggleSound, toggleTheme } = useStore();
   const { user, loading: authLoading } = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
