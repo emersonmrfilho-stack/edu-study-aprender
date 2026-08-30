@@ -102,6 +102,7 @@ type Ctx = {
   dropLostStreak: () => void;
   buyAvatar: (id: string, price: number) => boolean;
   selectAvatar: (id: string) => void;
+  addGems: (amount: number) => void;
 };
 
 const StoreContext = createContext<Ctx | null>(null);
@@ -386,6 +387,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return ok;
   }, []);
 
+  const addGems = useCallback(
+    (amount: number) => setState((s) => ({ ...s, gems: s.gems + Math.max(0, Math.round(amount)) })),
+    [],
+  );
+
   const selectAvatar = useCallback(
     (id: string) =>
       setState((s) => (s.ownedAvatars.includes(id) ? { ...s, avatarId: id } : s)),
@@ -422,6 +428,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       dropLostStreak,
       buyAvatar,
       selectAvatar,
+      addGems,
     }),
     [
       state,
@@ -445,6 +452,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       dropLostStreak,
       buyAvatar,
       selectAvatar,
+      addGems,
     ],
   );
 
