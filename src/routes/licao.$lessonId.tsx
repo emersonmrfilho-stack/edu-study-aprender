@@ -98,8 +98,8 @@ function LessonPage() {
   if (phase === "finished") {
     const xp = 10 + correctCount * 2;
     return (
-      <div className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-6 px-6 text-center">
-        <Mascot size={180} />
+      <div className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-6 px-6 py-10 text-center">
+        <Mascot size={140} />
         <h1 className="text-3xl font-black text-primary">Lição concluída!</h1>
         <div className="flex gap-3">
           <div className="rounded-2xl border-2 border-streak bg-streak/10 px-6 py-3">
@@ -113,11 +113,20 @@ function LessonPage() {
             </p>
           </div>
         </div>
+
+        <ChestReward onDone={() => setChestOpened(true)} />
+
         <button
           onClick={() => navigate({ to: "/" })}
-          className="btn-3d w-full max-w-sm rounded-2xl border-2 border-primary/60 bg-primary px-6 py-4 font-black uppercase tracking-wide text-primary-foreground"
+          disabled={!chestOpened}
+          className={cn(
+            "btn-3d w-full max-w-sm rounded-2xl border-2 px-6 py-4 font-black uppercase tracking-wide",
+            chestOpened
+              ? "border-primary/60 bg-primary text-primary-foreground"
+              : "border-border bg-muted text-muted-foreground",
+          )}
         >
-          Continuar
+          {chestOpened ? "Continuar" : "Abra o baú primeiro"}
         </button>
       </div>
     );
