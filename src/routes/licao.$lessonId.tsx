@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Heart, X, Volume2, VolumeX, Sparkles } from "lucide-react";
+import { ChestReward } from "@/components/ChestReward";
 import { ExerciseBody, canCheckExercise, evaluateExercise } from "@/components/ExerciseBody";
 import { Mascot, SpeechBubble } from "@/components/Mascot";
 import { SpeakButton } from "@/components/SpeakButton";
@@ -38,6 +39,7 @@ function LessonPage() {
   const [checked, setChecked] = useState<null | boolean>(null);
   const [answer, setAnswer] = useState<string | number | null>(null);
   const [built, setBuilt] = useState<string[]>([]);
+  const [chestOpened, setChestOpened] = useState(false);
 
   if (!ready) return <div className="min-h-screen bg-background" />;
   const exCur = exercises[index];
