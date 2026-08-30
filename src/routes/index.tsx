@@ -1,3 +1,4 @@
+import { SubjectIcon } from "@/components/SubjectIcon";
 import { createFileRoute, Link, useNavigate, type LinkProps } from "@tanstack/react-router";
 import { ChevronRight, Crown, Dumbbell, Flame, Play, Sparkles, Swords, Target, Trophy, Zap } from "lucide-react";
 import { Onboarding } from "@/components/Onboarding";

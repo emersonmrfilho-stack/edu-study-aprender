@@ -1,3 +1,4 @@
+import { SubjectIcon } from "@/components/SubjectIcon";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
