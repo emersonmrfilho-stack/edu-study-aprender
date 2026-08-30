@@ -515,7 +515,7 @@ function FinalScreen({
           className={cn("h-14 w-14", bothDone ? (won ? "text-gem" : "text-muted-foreground") : "text-primary")}
           strokeWidth={2.5}
         />
-        <Mascot size={120} className={won ? "animate-float" : undefined} />
+        <Mascot size={120} className={won ? "animate-float" : ""} />
       </div>
       <h1 className="text-2xl font-black">
         {bothDone ? (draw ? "Empate!" : won ? "Você venceu!" : "Você perdeu") : "Sua vez acabou!"}

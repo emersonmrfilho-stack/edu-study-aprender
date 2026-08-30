@@ -1,3 +1,4 @@
+import { SubjectIcon } from "@/components/SubjectIcon";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, Star, Lock, Trophy, FileCheck } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
