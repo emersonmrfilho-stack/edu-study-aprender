@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { GRADES, getGrade } from "@/lib/curriculum";
 import { placementQuestions, shuffledOptions, type Exercise } from "@/lib/questions";
 import { useStore } from "@/lib/store";
 import { Mascot, SpeechBubble } from "./Mascot";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Onboarding() {
   const { setProfile } = useStore();
@@ -14,6 +15,11 @@ export function Onboarding() {
   const [qIndex, setQIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) setStep((s) => (s === "welcome" ? "name" : s));
+  }, [user]);
 
   const questions = placementQuestions(gradeId).filter(
     (q) => q.kind === "select" || q.kind === "truefalse",
