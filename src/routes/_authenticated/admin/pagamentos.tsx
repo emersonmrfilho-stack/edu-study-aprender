@@ -8,6 +8,7 @@ import type { Tables } from "@/integrations/supabase/types";
 
 
 export const Route = createFileRoute("/_authenticated/admin/pagamentos")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Admin — aprovar pagamentos | Edu Study" },

@@ -11,6 +11,7 @@ import { useSfx } from "@/hooks/useSfx";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/recuperar-ofensiva")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Desafio de recuperação de ofensiva — Edu Study" },

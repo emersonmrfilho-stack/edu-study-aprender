@@ -13,6 +13,7 @@ import { createFileRoute } from "@tanstack/react-router";
  * A secret deve ser configurada no projeto (PICPAY_WEBHOOK_SECRET).
  */
 export const Route = createFileRoute("/api/public/picpay")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {

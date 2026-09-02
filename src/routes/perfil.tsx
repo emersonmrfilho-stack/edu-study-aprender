@@ -28,6 +28,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/perfil")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Meu perfil — Edu Study" },

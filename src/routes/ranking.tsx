@@ -12,6 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/ranking")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Ranking de estudantes — Edu Study" },

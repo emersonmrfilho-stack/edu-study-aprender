@@ -10,6 +10,7 @@ import { useSfx } from "@/hooks/useSfx";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/desafios")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Desafios diários, semanais e mensais — Edu Study" },
