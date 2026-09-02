@@ -86,6 +86,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Curso escolar completo e gamificado, do 1º ano do Fundamental ao 3º ano do Ensino Médio.",
       },
       { name: "author", content: "Edu Study" },
+      {
+        name: "google-site-verification",
+        content: "wdWdpQceOlkuCWsFbkXKGdmW0asJXaojBwp3ZHif3Ao",
+      },
       { property: "og:title", content: "Edu Study" },
       { property: "og:description", content: "Curso escolar completo e gamificado com o macaco Edu." },
       { property: "og:type", content: "website" },
