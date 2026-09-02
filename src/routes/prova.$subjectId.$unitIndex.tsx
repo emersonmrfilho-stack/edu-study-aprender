@@ -11,6 +11,7 @@ import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/prova/$subjectId/$unitIndex")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Prova — Edu Study" },

@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 
 export const Route = createFileRoute("/premium")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Premium — corações ilimitados | Edu Study" },

@@ -12,6 +12,7 @@ import { levelInfo } from "@/lib/level";
 import { useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Edu Study — curso escolar completo com o macaco Edu" },

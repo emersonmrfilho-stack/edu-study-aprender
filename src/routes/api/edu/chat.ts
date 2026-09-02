@@ -14,6 +14,7 @@ Como você responde:
 - Nunca invente conteúdo fora do tema escolar; se a pergunta não for de estudo, traga o aluno de volta ao aprendizado com bom humor.`;
 
 export const Route = createFileRoute("/api/edu/chat")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {

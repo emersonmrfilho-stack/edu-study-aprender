@@ -7,6 +7,7 @@ import { subjectProgress } from "@/lib/progress";
 import { useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/materias")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Matérias do seu ano — Edu Study" },

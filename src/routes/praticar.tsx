@@ -9,6 +9,7 @@ import { nextLessonId } from "@/lib/progress";
 import { useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/praticar")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Praticar — Edu Study" },

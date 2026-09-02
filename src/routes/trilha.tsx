@@ -11,6 +11,7 @@ import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/trilha")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Trilha de lições — Edu Study" },

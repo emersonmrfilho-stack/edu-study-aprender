@@ -9,6 +9,7 @@ import { playReward, playWrong } from "@/lib/sound";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/loja")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Loja de gemas — Edu Study" },

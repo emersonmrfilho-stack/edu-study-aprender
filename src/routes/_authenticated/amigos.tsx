@@ -20,6 +20,7 @@ import {
 } from "@/lib/social.functions";
 
 export const Route = createFileRoute("/_authenticated/amigos")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Amigos e batalhas — Edu Study" },

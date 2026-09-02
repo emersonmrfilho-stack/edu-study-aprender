@@ -12,6 +12,7 @@ import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/licao/$lessonId")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Lição — Edu Study" },

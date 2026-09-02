@@ -14,6 +14,7 @@ type Msg = { role: "user" | "assistant"; content: string };
 type Search = { q?: string | undefined; materia?: string | undefined };
 
 export const Route = createFileRoute("/edu-ia")({
+  staticData: { sitemap: true },
   validateSearch: (search: Record<string, unknown>): Search => ({
     q: typeof search["q"] === "string" ? search["q"] : undefined,
     materia: typeof search["materia"] === "string" ? search["materia"] : undefined,
