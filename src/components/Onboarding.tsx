@@ -42,12 +42,17 @@ export function Onboarding() {
             Oi! Eu sou o Edu. Vou te ensinar todas as matérias da escola, do 1º ano até o 3º ano do
             Ensino Médio — de um jeito divertido.
           </p>
-          <PrimaryButton onClick={() => setStep("name")}>Começar</PrimaryButton>
           <Link
             to="/auth"
-            className="text-sm font-extrabold uppercase tracking-wide text-muted-foreground"
+            className="btn-3d w-full max-w-sm rounded-2xl border-2 border-primary/60 bg-primary px-4 py-4 text-base font-black uppercase tracking-wide text-primary-foreground"
           >
-            Já tenho uma conta
+            Criar conta
+          </Link>
+          <Link
+            to="/auth"
+            className="btn-3d w-full max-w-sm rounded-2xl border-2 border-border bg-card px-4 py-4 text-base font-black uppercase tracking-wide text-foreground"
+          >
+            Entrar
           </Link>
         </div>
       )}
