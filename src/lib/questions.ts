@@ -1,5 +1,6 @@
 import { getGrade, parseLessonId, LESSONS_PER_UNIT, type Band } from "./curriculum";
 import { EXTRA_BANKS } from "./questions-extra";
+import { unitTopic, unitKeywords, topicScore, type TopicKey } from "./topics";
 
 export type Exercise =
   | { kind: "select"; prompt: string; options: string[]; answer: number; hint?: string; explanation?: string; image?: string }
@@ -486,8 +487,10 @@ function topicMathExercise(topic: TopicKey, level: number, r: Rng, slot: number)
  * dentro de uma mesma lição, cada posição use um modelo diferente (sem repetição
  * de templates consecutivos).
  */
-function mathExercise(level: number, unit: number, r: Rng, slot: number): Exercise {
+function mathExercise(level: number, unitTitle: string, r: Rng, slot: number): Exercise {
   const pick = (fns: ((r: Rng) => Exercise)[]) => fns[slot % fns.length]!(r);
+  const topical = topicMathExercise(unitTopic(unitTitle), level, r, slot);
+  if (topical) return topical;
 
   if (level <= 2) {
     return pick([
@@ -1009,7 +1012,7 @@ export function exercisesForLesson(lessonId: string): Exercise[] {
     const seen = new Set<string>();
     let guard = 0;
     while (out.length < EXERCISES_PER_LESSON && guard++ < 200) {
-      const ex = mathExercise(grade.level, ref.unitIndex, r, out.length);
+      const ex = mathExercise(grade.level, ref.unitTitle, r, out.length);
       const key = ex.kind === "select" ? ex.prompt : JSON.stringify(ex);
       if (seen.has(key)) continue;
       seen.add(key);
@@ -1034,7 +1037,7 @@ export function examExercises(gradeId: string, subjectId: string, unitIndex: num
     const seen = new Set<string>();
     let guard = 0;
     while (out.length < EXAM_QUESTIONS && guard++ < 300) {
-      const ex = mathExercise(grade.level, unitIndex, r, out.length);
+      const ex = mathExercise(grade.level, unitTitleFor(gradeId, subjectId, unitIndex), r, out.length);
       const key = ex.kind === "select" ? ex.prompt : JSON.stringify(ex);
       if (seen.has(key)) continue;
       seen.add(key);
@@ -1158,7 +1161,7 @@ export function placementQuestions(gradeId: string): Exercise[] {
   const grade = getGrade(gradeId);
   const r = mulberry32(hash("placement:" + gradeId));
   const qs: Exercise[] = [];
-  for (let i = 0; i < 3; i++) qs.push(mathExercise(grade.level, 0, r, i));
+  for (let i = 0; i < 3; i++) qs.push(mathExercise(grade.level, "Números", r, i));
   const por = shuffle(bankFor("portugues", grade.band), r).slice(0, 2);
   const other = shuffle(
     grade.band === "em" ? [...BIOLOGIA, ...HISTORIA.em!] : bankFor("ciencias", grade.band),
