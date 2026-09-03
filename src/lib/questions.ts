@@ -1,5 +1,6 @@
 import { getGrade, parseLessonId, LESSONS_PER_UNIT, type Band } from "./curriculum";
 import { EXTRA_BANKS } from "./questions-extra";
+import { unitsFor } from "./curriculum";
 import { unitTopic, unitKeywords, topicScore, type TopicKey } from "./topics";
 
 export type Exercise =
@@ -999,6 +1000,22 @@ function takeFromBank(bank: Exercise[], seedKey: string, ordinal: number, count:
   return out;
 }
 
+function unitTitleFor(gradeId: string, subjectId: string, unitIndex: number): string {
+  return unitsFor(gradeId, subjectId)[unitIndex]?.title ?? "";
+}
+
+/** Prioriza no banco as questões cujo enunciado combina com o assunto da unidade. */
+function bankForUnit(bank: Exercise[], unitTitle: string, count: number): Exercise[] {
+  const keywords = unitKeywords(unitTitle);
+  if (keywords.length === 0) return bank;
+  const text = (ex: Exercise) =>
+    [ex.prompt, ex.kind === "select" ? ex.options.join(" ") : "", ex.kind === "assemble" ? ex.sentence : ""].join(" ");
+  const matched = bank.filter((ex) => topicScore(text(ex), keywords) > 0);
+  if (matched.length >= count) return matched;
+  const rest = bank.filter((ex) => !matched.includes(ex));
+  return [...matched, ...rest];
+}
+
 export const EXERCISES_PER_LESSON = 8;
 
 export function exercisesForLesson(lessonId: string): Exercise[] {
@@ -1021,9 +1038,9 @@ export function exercisesForLesson(lessonId: string): Exercise[] {
     return out;
   }
 
-  const bank = bankFor(ref.subjectId, grade.band);
+  const bank = bankForUnit(bankFor(ref.subjectId, grade.band), ref.unitTitle, EXERCISES_PER_LESSON);
   const ordinal = ref.unitIndex * LESSONS_PER_UNIT + ref.lessonIndex;
-  return takeFromBank(bank, `${ref.gradeId}:${ref.subjectId}:licao`, ordinal, EXERCISES_PER_LESSON);
+  return takeFromBank(bank, `${ref.gradeId}:${ref.subjectId}:${ref.unitIndex}:licao`, ordinal, EXERCISES_PER_LESSON);
 }
 
 export const EXAM_QUESTIONS = 10;
@@ -1046,8 +1063,12 @@ export function examExercises(gradeId: string, subjectId: string, unitIndex: num
     return out;
   }
 
-  const bank = bankFor(subjectId, grade.band);
-  return takeFromBank(bank, `${gradeId}:${subjectId}:prova`, unitIndex, EXAM_QUESTIONS);
+  const bank = bankForUnit(
+    bankFor(subjectId, grade.band),
+    unitTitleFor(gradeId, subjectId, unitIndex),
+    EXAM_QUESTIONS,
+  );
+  return takeFromBank(bank, `${gradeId}:${subjectId}:${unitIndex}:prova`, unitIndex, EXAM_QUESTIONS);
 }
 
 // Exercícios embaralhados de opções, determinístico por índice
