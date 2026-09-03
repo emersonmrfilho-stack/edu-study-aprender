@@ -1,5 +1,7 @@
 import { getGrade, parseLessonId, LESSONS_PER_UNIT, type Band } from "./curriculum";
 import { EXTRA_BANKS } from "./questions-extra";
+import { unitsFor } from "./curriculum";
+import { unitTopic, unitKeywords, topicScore, type TopicKey } from "./topics";
 
 export type Exercise =
   | { kind: "select"; prompt: string; options: string[]; answer: number; hint?: string; explanation?: string; image?: string }
@@ -59,14 +61,437 @@ function numOptions(r: Rng, correct: number, prompt: string): Exercise {
   return sel(prompt, opts, opts.indexOf(String(correct)));
 }
 
+// ---------- Geradores por tópico da unidade ----------
+/**
+ * Gera um exercício ligado ao assunto da unidade (geometria, frações, etc.).
+ * Retorna null quando o tópico não tem gerador próprio para aquele nível.
+ */
+function topicMathExercise(topic: TopicKey, level: number, r: Rng, slot: number): Exercise | null {
+  const pick = (fns: ((r: Rng) => Exercise)[]) => fns[slot % fns.length]!(r);
+
+  if (topic === "geometria") {
+    if (level <= 3) {
+      return pick([
+        () => sel("Qual figura tem 3 lados?", ["Triângulo", "Quadrado", "Círculo", "Retângulo"], 0),
+        () => sel("Qual figura NÃO tem lados retos?", ["Círculo", "Quadrado", "Triângulo", "Pentágono"], 0),
+        () => sel("Quantos lados tem um quadrado?", ["4", "3", "5", "6"], 0),
+        () => tf("Um retângulo tem 4 cantos (vértices).", true),
+        () => sel("Qual objeto tem forma de círculo?", ["Uma roda", "Uma porta", "Um livro", "Uma caixa"], 0),
+        () => sel("Quantos lados tem um pentágono?", ["5", "4", "6", "3"], 0),
+        () => sel("A forma de uma bola é:", ["Esfera", "Cubo", "Cilindro", "Cone"], 0),
+        () => tf("O triângulo tem mais lados que o quadrado.", false),
+      ]);
+    }
+    if (level <= 6) {
+      return pick([
+        (r) => {
+          const l = ri(r, 3, 15);
+          const w = ri(r, 3, 15);
+          return numOptions(r, 2 * (l + w), `Qual é o perímetro de um retângulo de ${l} cm por ${w} cm? (em cm)`);
+        },
+        (r) => {
+          const l = ri(r, 3, 15);
+          return numOptions(r, l * l, `Qual é a área de um quadrado de lado ${l} cm? (em cm²)`);
+        },
+        (r) => {
+          const b = ri(r, 4, 16);
+          const h = ri(r, 2, 10) * 2;
+          return numOptions(r, (b * h) / 2, `Qual é a área de um triângulo de base ${b} cm e altura ${h} cm? (em cm²)`);
+        },
+        () => sel("Um ângulo de 90° é chamado de:", ["Reto", "Agudo", "Obtuso", "Raso"], 0),
+        () => sel("Quantos graus tem a soma dos ângulos internos de um triângulo?", ["180°", "90°", "360°", "270°"], 0),
+        () => sel("Um polígono de 6 lados é o:", ["Hexágono", "Pentágono", "Octógono", "Heptágono"], 0),
+        (r) => {
+          const a = ri(r, 20, 70);
+          return numOptions(r, 90 - a, `Dois ângulos são complementares. Se um mede ${a}°, quanto mede o outro?`);
+        },
+        () => tf("No quadrado todos os lados têm a mesma medida.", true),
+      ]);
+    }
+    if (level <= 9) {
+      return pick([
+        (r) => {
+          const t = [
+            [3, 4, 5],
+            [6, 8, 10],
+            [5, 12, 13],
+            [9, 12, 15],
+          ][ri(r, 0, 3)]!;
+          return numOptions(r, t[2]!, `Um triângulo retângulo tem catetos ${t[0]} e ${t[1]}. Qual é a hipotenusa?`);
+        },
+        (r) => {
+          const a = ri(r, 30, 140);
+          return numOptions(r, 180 - a, `Dois ângulos são suplementares. Se um mede ${a}°, quanto mede o outro?`);
+        },
+        (r) => {
+          const n = ri(r, 4, 10);
+          return numOptions(r, (n - 2) * 180, `Qual é a soma dos ângulos internos de um polígono de ${n} lados? (em graus)`);
+        },
+        (r) => {
+          const rr = ri(r, 2, 12);
+          return numOptions(r, 2 * rr, `Em uma circunferência de raio ${rr} cm, quanto mede o diâmetro? (em cm)`);
+        },
+        () => sel("Dois triângulos semelhantes têm:", ["Ângulos iguais e lados proporcionais", "Sempre a mesma área", "Lados iguais", "Perímetros iguais"], 0),
+        (r) => {
+          const b = ri(r, 4, 20);
+          const h = ri(r, 3, 15);
+          return numOptions(r, b * h, `Qual é a área de um paralelogramo de base ${b} cm e altura ${h} cm? (em cm²)`);
+        },
+        () => tf("O Teorema de Pitágoras vale apenas para triângulos retângulos.", true),
+      ]);
+    }
+    return pick([
+      (r) => {
+        const a = ri(r, 2, 9);
+        return numOptions(r, a * a * a, `Qual é o volume de um cubo de aresta ${a} cm? (em cm³)`);
+      },
+      (r) => {
+        const rr = ri(r, 2, 8);
+        const h = ri(r, 2, 10);
+        return numOptions(r, rr * rr * h, `O volume do cilindro é πr²h. Com r = ${rr} e h = ${h}, qual é o coeficiente de π?`);
+      },
+      (r) => {
+        const x1 = ri(r, 0, 5);
+        const y1 = ri(r, 0, 5);
+        const dx = [3, 6][ri(r, 0, 1)]!;
+        const dy = dx === 3 ? 4 : 8;
+        return numOptions(r, Math.sqrt(dx * dx + dy * dy), `Qual é a distância entre A(${x1}, ${y1}) e B(${x1 + dx}, ${y1 + dy})?`);
+      },
+      () => sel("A equação da circunferência de centro (0,0) e raio 5 é:", ["x² + y² = 25", "x² + y² = 5", "x + y = 25", "x² − y² = 25"], 0),
+      (r) => {
+        const a = ri(r, 2, 8);
+        return numOptions(r, 6 * a * a, `Qual é a área total de um cubo de aresta ${a} cm? (em cm²)`);
+      },
+      () => sel("O coeficiente angular da reta y = 3x + 2 é:", ["3", "2", "−3", "1/3"], 0),
+      (r) => {
+        const b = ri(r, 3, 9);
+        const h = ri(r, 3, 9);
+        return numOptions(r, Math.round((b * b * h) / 3), `O volume da pirâmide de base quadrada é (a²·h)/3. Com a = ${b} e h = ${h}, quanto vale?`);
+      },
+    ]);
+  }
+
+  if (topic === "medidas") {
+    return pick([
+      (r) => {
+        const m = ri(r, 2, 20);
+        return numOptions(r, m * 100, `Quantos centímetros há em ${m} metros?`);
+      },
+      (r) => {
+        const kg = ri(r, 2, 15);
+        return numOptions(r, kg * 1000, `Quantos gramas há em ${kg} quilogramas?`);
+      },
+      (r) => {
+        const l = ri(r, 2, 12);
+        return numOptions(r, l * 1000, `Quantos mililitros há em ${l} litros?`);
+      },
+      (r) => {
+        const a = ri(r, 3, 15);
+        const b = ri(r, 3, 15);
+        return numOptions(r, 2 * (a + b), `Um terreno retangular mede ${a} m por ${b} m. Qual é o perímetro em metros?`);
+      },
+      (r) => {
+        const a = ri(r, 3, 15);
+        const b = ri(r, 3, 15);
+        return numOptions(r, a * b, `Qual é a área de um piso de ${a} m por ${b} m? (em m²)`);
+      },
+      () => sel("A unidade usada para medir massa é:", ["Quilograma", "Metro", "Litro", "Segundo"], 0),
+      () => tf("1 km é igual a 1000 metros.", true),
+    ]);
+  }
+
+  if (topic === "dinheirotempo") {
+    return pick([
+      (r) => {
+        const a = ri(r, 2, 20);
+        const b = ri(r, 2, 20);
+        return numOptions(r, a + b, `Você tem R$ ${a} e ganha R$ ${b}. Com quantos reais você fica?`);
+      },
+      (r) => {
+        const preco = ri(r, 3, 18);
+        const pago = 20;
+        return numOptions(r, pago - preco, `Um lanche custa R$ ${preco} e você paga com R$ 20. Qual é o troco?`);
+      },
+      (r) => {
+        const h = ri(r, 1, 10);
+        return numOptions(r, h * 60, `Quantos minutos há em ${h} horas?`);
+      },
+      () => sel("Quantos dias tem uma semana?", ["7", "5", "10", "30"], 0),
+      () => sel("Quantos meses tem um ano?", ["12", "10", "11", "24"], 0),
+      (r) => {
+        const q = ri(r, 2, 6);
+        const p = ri(r, 2, 12);
+        return numOptions(r, q * p, `Cada caderno custa R$ ${p}. Quanto custam ${q} cadernos?`);
+      },
+      () => tf("Meia hora tem 30 minutos.", true),
+    ]);
+  }
+
+  if (topic === "fracoes") {
+    return pick([
+      () => sel("Qual fração representa a metade de um inteiro?", ["1/2", "1/3", "1/4", "2/3"], 0),
+      (r) => {
+        const n = ri(r, 2, 9);
+        return numOptions(r, n * 2, `Se 1/2 de um número é ${n}, qual é o número?`);
+      },
+      () => sel("Qual fração é equivalente a 2/4?", ["1/2", "2/3", "3/4", "1/4"], 0),
+      (r) => {
+        const d = ri(r, 3, 9);
+        return sel(`Qual é maior: 1/${d} ou 1/${d + 2}?`, [`1/${d}`, `1/${d + 2}`, "São iguais", "Não dá para comparar"], 0),
+      },
+      () => sel("0,25 escrito como fração é:", ["1/4", "1/2", "2/5", "1/3"], 0),
+      (r) => {
+        const a = ri(r, 1, 8);
+        const b = ri(r, 1, 8);
+        return numOptions(r, Math.round((a / 10 + b / 10) * 10) / 10, `Quanto é ${a / 10} + ${b / 10}?`);
+      },
+      () => sel("A soma 1/4 + 1/4 é igual a:", ["1/2", "2/8", "1/8", "1"], 0),
+      () => tf("Uma fração com numerador maior que o denominador é maior que 1.", true),
+    ]);
+  }
+
+  if (topic === "porcentagem") {
+    return pick([
+      (r) => {
+        const p = ri(r, 1, 9) * 10;
+        const v = ri(r, 2, 20) * 10;
+        return numOptions(r, (p * v) / 100, `Quanto é ${p}% de ${v}?`);
+      },
+      (r) => {
+        const v = ri(r, 2, 20) * 10;
+        return numOptions(r, v / 2, `Quanto é 50% de ${v}?`);
+      },
+      (r) => {
+        const preco = ri(r, 10, 50) * 10;
+        const d = 10;
+        return numOptions(r, preco - (preco * d) / 100, `Um produto de R$ ${preco} teve ${d}% de desconto. Qual é o preço final?`);
+      },
+      (r) => {
+        const a = ri(r, 2, 9);
+        const k = ri(r, 2, 6);
+        return numOptions(r, a * k * 3, `Se 3 cadernos custam R$ ${a * k * 3 / 1}, quanto custam 3 cadernos iguais?`);
+      },
+      () => sel("25% equivale à fração:", ["1/4", "1/2", "1/5", "2/5"], 0),
+      (r) => {
+        const q = ri(r, 2, 10);
+        return numOptions(r, q * 3, `Se 2 litros custam R$ ${(q * 3) / 1} pela regra de três, quanto custam 2 litros?`);
+      },
+      () => tf("Aumentar 100% um valor significa dobrá-lo.", true),
+    ]);
+  }
+
+  if (topic === "estatistica") {
+    return pick([
+      (r) => {
+        const a = ri(r, 2, 10);
+        const b = ri(r, 2, 10);
+        const c = ri(r, 2, 10);
+        const soma = a + b + c;
+        return numOptions(r, Math.round((soma / 3) * 100) / 100, `Qual é a média de ${a}, ${b} e ${c}?`);
+      },
+      () => sel("A probabilidade de sair cara ao lançar uma moeda é:", ["50%", "25%", "75%", "100%"], 0),
+      () => sel("Ao lançar um dado, a probabilidade de sair um número par é:", ["1/2", "1/3", "1/6", "2/3"], 0),
+      () => sel("O gráfico de barras serve para:", ["Comparar quantidades", "Medir tempo", "Desenhar formas", "Resolver equações"], 0),
+      (r) => {
+        const vals = [ri(r, 1, 9), ri(r, 1, 9), ri(r, 1, 9), ri(r, 1, 9), ri(r, 1, 9)].sort((x, y) => x - y);
+        return numOptions(r, vals[2]!, `Qual é a mediana de ${vals.join(", ")}?`);
+      },
+      () => sel("Moda de um conjunto de dados é:", ["O valor que mais aparece", "A média", "O maior valor", "O menor valor"], 0),
+      () => tf("A probabilidade de um evento certo é 100%.", true),
+    ]);
+  }
+
+  if (topic === "potencias") {
+    return pick([
+      (r) => {
+        const n = ri(r, 2, 9);
+        return numOptions(r, n * n, `Quanto é ${n}²?`);
+      },
+      (r) => {
+        const n = [4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144][ri(r, 0, 10)]!;
+        return numOptions(r, Math.sqrt(n), `Qual é a raiz quadrada de ${n}?`);
+      },
+      (r) => {
+        const n = ri(r, 2, 5);
+        return numOptions(r, n * n * n, `Quanto é ${n}³?`);
+      },
+      (r) => {
+        const a = ri(r, 2, 5);
+        const m = ri(r, 2, 4);
+        const n2 = ri(r, 2, 4);
+        return sel(`Quanto é ${a}^${m} · ${a}^${n2}?`, [`${a}^${m + n2}`, `${a}^${m * n2}`, `${a}^${m - n2}`, `${2 * a}^${m + n2}`], 0),
+      },
+      () => sel("Como se escreve 45 000 em notação científica?", ["4,5 × 10⁴", "45 × 10³", "4,5 × 10³", "0,45 × 10⁵"], 0),
+      () => tf("Todo número elevado a zero (exceto o próprio zero) é igual a 1.", true),
+    ]);
+  }
+
+  if (topic === "algebra") {
+    return pick([
+      (r) => {
+        const x = ri(r, 2, 12);
+        const a = ri(r, 2, 9);
+        const b = ri(r, 1, 20);
+        return numOptions(r, x, `Resolva: ${a}x + ${b} = ${a * x + b}. Qual é o valor de x?`);
+      },
+      (r) => {
+        const x = ri(r, 2, 12);
+        const b = ri(r, 1, 15);
+        return numOptions(r, x, `Resolva: x − ${b} = ${x - b}.`);
+      },
+      (r) => {
+        const r1 = ri(r, 1, 6);
+        const r2 = ri(r, 1, 6);
+        const b = -(r1 + r2);
+        const c = r1 * r2;
+        return sel(
+          `As raízes de x² ${b >= 0 ? "+" : "−"} ${Math.abs(b)}x + ${c} = 0 são:`,
+          [`${r1} e ${r2}`, `${r1 + 1} e ${r2}`, `${-r1} e ${-r2}`, `${r1} e ${r2 + 2}`],
+          0,
+        );
+      },
+      () => sel("O produto notável (a + b)² é igual a:", ["a² + 2ab + b²", "a² + b²", "a² − b²", "2a + 2b"], 0),
+      () => sel("A fatoração de x² − 9 é:", ["(x + 3)(x − 3)", "(x − 3)²", "(x + 9)(x − 1)", "x(x − 9)"], 0),
+      (r) => {
+        const a = -ri(r, 1, 20);
+        const b = ri(r, 1, 20);
+        return numOptions(r, a + b, `Quanto é (${a}) + ${b}?`);
+      },
+      () => sel("No sistema x + y = 10 e x − y = 2, o valor de x é:", ["6", "4", "5", "8"], 0),
+    ]);
+  }
+
+  if (topic === "funcoes") {
+    return pick([
+      (r) => {
+        const a = ri(r, 2, 6);
+        const b = ri(r, 1, 9);
+        const x = ri(r, 1, 6);
+        return numOptions(r, a * x + b, `Dada f(x) = ${a}x + ${b}, qual é f(${x})?`);
+      },
+      () => sel("A função f(x) = x² − 4x + 3 tem gráfico:", ["Parábola com concavidade para cima", "Reta crescente", "Reta decrescente", "Hipérbole"], 0),
+      (r) => {
+        const b = [2, 3, 5, 10][ri(r, 0, 3)]!;
+        const e = ri(r, 2, 4);
+        return numOptions(r, e, `Quanto vale log na base ${b} de ${Math.pow(b, e)}?`);
+      },
+      () => sel("Na função afim f(x) = ax + b, o valor de b representa:", ["O ponto onde o gráfico corta o eixo y", "A inclinação", "A raiz", "O vértice"], 0),
+      (r) => {
+        const b = ri(r, 2, 4);
+        const e = ri(r, 2, 4);
+        return numOptions(r, Math.pow(b, e), `Se f(x) = ${b}^x, quanto vale f(${e})?`);
+      },
+      () => tf("Uma função é uma relação em que cada elemento do domínio tem apenas uma imagem.", true),
+    ]);
+  }
+
+  if (topic === "sequencias") {
+    return pick([
+      (r) => {
+        const a1 = ri(r, 1, 8);
+        const d = ri(r, 2, 6);
+        const n = ri(r, 5, 12);
+        return numOptions(r, a1 + (n - 1) * d, `Numa PA com a₁ = ${a1} e razão ${d}, qual é o termo a${n}?`);
+      },
+      (r) => {
+        const a1 = ri(r, 1, 5);
+        const q = ri(r, 2, 4);
+        const n = ri(r, 3, 6);
+        return numOptions(r, a1 * Math.pow(q, n - 1), `Numa PG com a₁ = ${a1} e q = ${q}, qual é o termo a${n}?`);
+      },
+      (r) => {
+        const a1 = ri(r, 1, 8);
+        const d = ri(r, 2, 5);
+        const n = ri(r, 4, 10);
+        const an = a1 + (n - 1) * d;
+        return numOptions(r, ((a1 + an) * n) / 2, `Qual é a soma dos ${n} primeiros termos da PA de a₁ = ${a1} e razão ${d}?`);
+      },
+      () => sel("Na sequência 2, 4, 8, 16, ... o próximo termo é:", ["32", "24", "20", "18"], 0),
+      () => sel("Uma PA é uma sequência em que:", ["A diferença entre termos é constante", "A razão é multiplicativa", "Os termos são iguais", "Não há padrão"], 0),
+    ]);
+  }
+
+  if (topic === "trigonometria") {
+    return pick([
+      () => sel("Quanto vale sen 30°?", ["1/2", "√3/2", "√2/2", "1"], 0),
+      () => sel("Quanto vale cos 60°?", ["1/2", "√3/2", "0", "1"], 0),
+      () => sel("Quanto vale tg 45°?", ["1", "0", "√3", "1/2"], 0),
+      () => sel("A relação fundamental da trigonometria é:", ["sen²x + cos²x = 1", "sen x + cos x = 1", "tg x = cos/sen", "sen x = 1/cos x"], 0),
+      () => sel("Em um triângulo retângulo, o seno de um ângulo é:", ["Cateto oposto / hipotenusa", "Cateto adjacente / hipotenusa", "Hipotenusa / cateto oposto", "Cateto oposto / adjacente"], 0),
+      () => sel("π radianos equivale a:", ["180°", "90°", "360°", "45°"], 0),
+    ]);
+  }
+
+  if (topic === "combinatoria") {
+    return pick([
+      (r) => {
+        const n = ri(r, 4, 7);
+        const fat = [1, 1, 2, 6, 24, 120, 720, 5040][n]!;
+        return numOptions(r, fat, `Quanto é ${n}! ?`);
+      },
+      (r) => {
+        const n = ri(r, 4, 7);
+        return numOptions(r, (n * (n - 1)) / 2, `Quantas duplas diferentes podem ser formadas com ${n} pessoas?`);
+      },
+      (r) => {
+        const n = ri(r, 3, 7);
+        return numOptions(r, n * (n - 1) * (n - 2), `Quantos arranjos de 3 elementos existem em um grupo de ${n}?`);
+      },
+      () => sel("Permutação de 4 elementos distintos é:", ["24", "12", "16", "8"], 0),
+      () => sel("Na combinação, a ordem dos elementos:", ["Não importa", "Sempre importa", "Depende do número", "É alfabética"], 0),
+    ]);
+  }
+
+  if (topic === "financeira") {
+    return pick([
+      (r) => {
+        const c = ri(r, 100, 900);
+        const i = ri(r, 2, 10);
+        return numOptions(r, Math.round(c * (1 + i / 100)), `Um capital de R$ ${c} a ${i}% de juros simples por 1 ano gera montante de:`);
+      },
+      (r) => {
+        const c = ri(r, 100, 900);
+        const i = ri(r, 2, 10);
+        return numOptions(r, Math.round((c * i) / 100), `Qual é o juro simples de R$ ${c} a ${i}% ao ano, em 1 ano?`);
+      },
+      () => sel("Juros compostos incidem sobre:", ["O montante acumulado", "Apenas o capital inicial", "Somente o juro", "Nada"], 0),
+      (r) => {
+        const p = ri(r, 100, 500);
+        return numOptions(r, Math.round(p * 0.9), `Um produto de R$ ${p} com 10% de desconto sai por:`);
+      },
+      () => tf("Na inflação alta, o poder de compra do dinheiro diminui.", true),
+    ]);
+  }
+
+  if (topic === "complexos") {
+    return pick([
+      () => sel("i² é igual a:", ["−1", "1", "0", "i"], 0),
+      (r) => {
+        const a = ri(r, 1, 5);
+        const b = ri(r, 1, 5);
+        return numOptions(r, Math.sqrt(a * a + b * b), `Qual é o módulo do número complexo ${a} + ${b}i?`);
+      },
+      () => sel("O conjugado de 3 + 2i é:", ["3 − 2i", "−3 + 2i", "2 + 3i", "3 + 2i"], 0),
+      () => sel("O determinante de uma matriz identidade 2×2 é:", ["1", "0", "2", "−1"], 0),
+      () => sel("Um polinômio de grau 3 tem, no máximo:", ["3 raízes", "2 raízes", "4 raízes", "1 raiz"], 0),
+      () => tf("Sistemas lineares podem ser resolvidos por escalonamento.", true),
+    ]);
+  }
+
+  void level;
+  return null;
+}
+
 // ---------- Matemática procedural por ano ----------
 /**
  * Gera exercícios de matemática variados. O parâmetro `slot` garante que,
  * dentro de uma mesma lição, cada posição use um modelo diferente (sem repetição
  * de templates consecutivos).
  */
-function mathExercise(level: number, unit: number, r: Rng, slot: number): Exercise {
+function mathExercise(level: number, unitTitle: string, r: Rng, slot: number): Exercise {
   const pick = (fns: ((r: Rng) => Exercise)[]) => fns[slot % fns.length]!(r);
+  const topical = topicMathExercise(unitTopic(unitTitle), level, r, slot);
+  if (topical) return topical;
 
   if (level <= 2) {
     return pick([
@@ -575,6 +1000,22 @@ function takeFromBank(bank: Exercise[], seedKey: string, ordinal: number, count:
   return out;
 }
 
+function unitTitleFor(gradeId: string, subjectId: string, unitIndex: number): string {
+  return unitsFor(gradeId, subjectId)[unitIndex]?.title ?? "";
+}
+
+/** Prioriza no banco as questões cujo enunciado combina com o assunto da unidade. */
+function bankForUnit(bank: Exercise[], unitTitle: string, count: number): Exercise[] {
+  const keywords = unitKeywords(unitTitle);
+  if (keywords.length === 0) return bank;
+  const text = (ex: Exercise) =>
+    [ex.prompt, ex.kind === "select" ? ex.options.join(" ") : "", ex.kind === "assemble" ? ex.sentence : ""].join(" ");
+  const matched = bank.filter((ex) => topicScore(text(ex), keywords) > 0);
+  if (matched.length >= count) return matched;
+  const rest = bank.filter((ex) => !matched.includes(ex));
+  return [...matched, ...rest];
+}
+
 export const EXERCISES_PER_LESSON = 8;
 
 export function exercisesForLesson(lessonId: string): Exercise[] {
@@ -588,7 +1029,7 @@ export function exercisesForLesson(lessonId: string): Exercise[] {
     const seen = new Set<string>();
     let guard = 0;
     while (out.length < EXERCISES_PER_LESSON && guard++ < 200) {
-      const ex = mathExercise(grade.level, ref.unitIndex, r, out.length);
+      const ex = mathExercise(grade.level, ref.unitTitle, r, out.length);
       const key = ex.kind === "select" ? ex.prompt : JSON.stringify(ex);
       if (seen.has(key)) continue;
       seen.add(key);
@@ -597,9 +1038,9 @@ export function exercisesForLesson(lessonId: string): Exercise[] {
     return out;
   }
 
-  const bank = bankFor(ref.subjectId, grade.band);
+  const bank = bankForUnit(bankFor(ref.subjectId, grade.band), ref.unitTitle, EXERCISES_PER_LESSON);
   const ordinal = ref.unitIndex * LESSONS_PER_UNIT + ref.lessonIndex;
-  return takeFromBank(bank, `${ref.gradeId}:${ref.subjectId}:licao`, ordinal, EXERCISES_PER_LESSON);
+  return takeFromBank(bank, `${ref.gradeId}:${ref.subjectId}:${ref.unitIndex}:licao`, ordinal, EXERCISES_PER_LESSON);
 }
 
 export const EXAM_QUESTIONS = 10;
@@ -613,7 +1054,7 @@ export function examExercises(gradeId: string, subjectId: string, unitIndex: num
     const seen = new Set<string>();
     let guard = 0;
     while (out.length < EXAM_QUESTIONS && guard++ < 300) {
-      const ex = mathExercise(grade.level, unitIndex, r, out.length);
+      const ex = mathExercise(grade.level, unitTitleFor(gradeId, subjectId, unitIndex), r, out.length);
       const key = ex.kind === "select" ? ex.prompt : JSON.stringify(ex);
       if (seen.has(key)) continue;
       seen.add(key);
@@ -622,8 +1063,12 @@ export function examExercises(gradeId: string, subjectId: string, unitIndex: num
     return out;
   }
 
-  const bank = bankFor(subjectId, grade.band);
-  return takeFromBank(bank, `${gradeId}:${subjectId}:prova`, unitIndex, EXAM_QUESTIONS);
+  const bank = bankForUnit(
+    bankFor(subjectId, grade.band),
+    unitTitleFor(gradeId, subjectId, unitIndex),
+    EXAM_QUESTIONS,
+  );
+  return takeFromBank(bank, `${gradeId}:${subjectId}:${unitIndex}:prova`, unitIndex, EXAM_QUESTIONS);
 }
 
 // Exercícios embaralhados de opções, determinístico por índice
@@ -737,7 +1182,7 @@ export function placementQuestions(gradeId: string): Exercise[] {
   const grade = getGrade(gradeId);
   const r = mulberry32(hash("placement:" + gradeId));
   const qs: Exercise[] = [];
-  for (let i = 0; i < 3; i++) qs.push(mathExercise(grade.level, 0, r, i));
+  for (let i = 0; i < 3; i++) qs.push(mathExercise(grade.level, "Números", r, i));
   const por = shuffle(bankFor("portugues", grade.band), r).slice(0, 2);
   const other = shuffle(
     grade.band === "em" ? [...BIOLOGIA, ...HISTORIA.em!] : bankFor("ciencias", grade.band),
