@@ -300,10 +300,10 @@ const ES: Record<LangTheme, LangExercise[]> = {
   ],
 };
 
-export function langBankFor(subjectId: string, unitTitle: string): LangExercise[] {
+export function langBanks(subjectId: string, unitTitle: string): { main: LangExercise[]; rest: LangExercise[] } {
   const theme = langTheme(unitTitle);
   const all = subjectId === "espanhol" ? ES : EN;
   const main = all[theme] ?? [];
   const rest = (Object.keys(all) as LangTheme[]).filter((k) => k !== theme).flatMap((k) => all[k]);
-  return [...main, ...rest];
+  return { main, rest };
 }
