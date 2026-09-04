@@ -237,7 +237,7 @@ function topicMathExercise(topic: TopicKey, level: number, r: Rng, slot: number)
       () => sel("Qual fração é equivalente a 2/4?", ["1/2", "2/3", "3/4", "1/4"], 0),
       (r) => {
         const d = ri(r, 3, 9);
-        return sel(`Qual é maior: 1/${d} ou 1/${d + 2}?`, [`1/${d}`, `1/${d + 2}`, "São iguais", "Não dá para comparar"], 0),
+        return sel(`Qual é maior: 1/${d} ou 1/${d + 2}?`, [`1/${d}`, `1/${d + 2}`, "São iguais", "Não dá para comparar"], 0);
       },
       () => sel("0,25 escrito como fração é:", ["1/4", "1/2", "2/5", "1/3"], 0),
       (r) => {
@@ -319,7 +319,7 @@ function topicMathExercise(topic: TopicKey, level: number, r: Rng, slot: number)
         const a = ri(r, 2, 5);
         const m = ri(r, 2, 4);
         const n2 = ri(r, 2, 4);
-        return sel(`Quanto é ${a}^${m} · ${a}^${n2}?`, [`${a}^${m + n2}`, `${a}^${m * n2}`, `${a}^${m - n2}`, `${2 * a}^${m + n2}`], 0),
+        return sel(`Quanto é ${a}^${m} · ${a}^${n2}?`, [`${a}^${m + n2}`, `${a}^${m * n2}`, `${a}^${m - n2}`, `${2 * a}^${m + n2}`], 0);
       },
       () => sel("Como se escreve 45 000 em notação científica?", ["4,5 × 10⁴", "45 × 10³", "4,5 × 10³", "0,45 × 10⁵"], 0),
       () => tf("Todo número elevado a zero (exceto o próprio zero) é igual a 1.", true),
