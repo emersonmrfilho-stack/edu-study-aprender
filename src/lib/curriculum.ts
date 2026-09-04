@@ -64,12 +64,14 @@ export function subjectsForGrade(gradeId: string): Subject[] {
       "historia",
       "geografia",
       "ingles",
+      "espanhol",
       "filosofia",
       "sociologia",
     ].map((s) => SUBJECTS[s]!);
   }
   const base = ["matematica", "portugues", "ciencias", "historia", "geografia"];
   if (g.level >= 3) base.push("ingles");
+  if (g.level >= 6) base.push("espanhol");
   return base.map((s) => SUBJECTS[s]!);
 }
 
