@@ -68,6 +68,57 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_activities: {
+        Row: {
+          answer_bool: boolean | null
+          answer_index: number
+          answer_text: string | null
+          created_at: string
+          created_by: string | null
+          explanation: string | null
+          grade_id: string
+          id: string
+          kind: string
+          options: Json
+          prompt: string
+          subject_id: string
+          unit_index: number
+          updated_at: string
+        }
+        Insert: {
+          answer_bool?: boolean | null
+          answer_index?: number
+          answer_text?: string | null
+          created_at?: string
+          created_by?: string | null
+          explanation?: string | null
+          grade_id: string
+          id?: string
+          kind?: string
+          options?: Json
+          prompt: string
+          subject_id: string
+          unit_index?: number
+          updated_at?: string
+        }
+        Update: {
+          answer_bool?: boolean | null
+          answer_index?: number
+          answer_text?: string | null
+          created_at?: string
+          created_by?: string | null
+          explanation?: string | null
+          grade_id?: string
+          id?: string
+          kind?: string
+          options?: Json
+          prompt?: string
+          subject_id?: string
+          unit_index?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       friendships: {
         Row: {
           addressee_id: string
