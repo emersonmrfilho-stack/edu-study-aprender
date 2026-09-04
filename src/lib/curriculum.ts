@@ -42,6 +42,7 @@ export const SUBJECTS: Record<string, Subject> = {
   historia: { id: "historia", name: "História", color: "subject-history" },
   geografia: { id: "geografia", name: "Geografia", color: "subject-geo" },
   ingles: { id: "ingles", name: "Inglês", color: "subject-english" },
+  espanhol: { id: "espanhol", name: "Espanhol", color: "subject-spanish" },
   fisica: { id: "fisica", name: "Física", color: "subject-physics" },
   quimica: { id: "quimica", name: "Química", color: "subject-chem" },
   biologia: { id: "biologia", name: "Biologia", color: "subject-bio" },
