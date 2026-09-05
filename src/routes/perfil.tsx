@@ -158,6 +158,20 @@ function Perfil() {
           </div>
         </Link>
 
+        <Link
+          to="/admin/atividades"
+          className="press lift mt-3 flex items-center gap-3 rounded-3xl border-2 border-border bg-card p-4"
+        >
+          <Settings className="h-7 w-7 shrink-0 text-primary" strokeWidth={3} />
+          <div>
+            <p className="font-black">Painel de atividades</p>
+            <p className="text-sm font-bold text-muted-foreground">
+              Crie, edite e exclua as atividades das lições.
+            </p>
+          </div>
+        </Link>
+
+
         <div className="mt-4 grid gap-3">
           <button
             onClick={() => refillHearts()}
