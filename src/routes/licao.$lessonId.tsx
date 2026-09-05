@@ -33,9 +33,10 @@ function LessonPage() {
   const { state, ready, loseHeart, completeLesson, toggleSound } = useStore();
 
   const ref = parseLessonId(lessonId);
-  const exercises = useMemo(() => exercisesForLesson(lessonId), [lessonId]);
+  const generated = useMemo(() => exercisesForLesson(lessonId), [lessonId]);
   const concept = useMemo(() => lessonConcept(lessonId), [lessonId]);
 
+  const [custom, setCustom] = useState<Exercise[]>([]);
   const [phase, setPhase] = useState<"teach" | "exercise" | "finished">("teach");
   const [index, setIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -43,6 +44,23 @@ function LessonPage() {
   const [answer, setAnswer] = useState<string | number | null>(null);
   const [built, setBuilt] = useState<string[]>([]);
   const [chestOpened, setChestOpened] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    if (!ref) return;
+    customExercisesFor(ref.gradeId, ref.subjectId, ref.unitIndex).then((list) => {
+      if (active) setCustom(list);
+    });
+    return () => {
+      active = false;
+    };
+  }, [lessonId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const exercises = useMemo(
+    () => (custom.length ? [...custom, ...generated].slice(0, generated.length || custom.length) : generated),
+    [custom, generated],
+  );
+
 
   if (!ready) return <div className="min-h-screen bg-background" />;
   const exCur = exercises[index];
