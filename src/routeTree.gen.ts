@@ -25,6 +25,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TrilhaRouteImport } from './routes/trilha'
 import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated/amigos'
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
+import { Route as AuthenticatedAdminAtividadesRouteImport } from './routes/_authenticated/admin/atividades'
 import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
 import { Route as AuthenticatedBatalhaBattleIdRouteImport } from './routes/_authenticated/batalha.$battleId'
 import { Route as ApiEduChatRouteImport } from './routes/api/edu/chat'
@@ -110,6 +111,12 @@ const LicaoLessonIdRoute = LicaoLessonIdRouteImport.update({
   path: '/licao/$lessonId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminAtividadesRoute =
+  AuthenticatedAdminAtividadesRouteImport.update({
+    id: '/admin/atividades',
+    path: '/admin/atividades',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminPagamentosRoute =
   AuthenticatedAdminPagamentosRouteImport.update({
     id: '/admin/pagamentos',
@@ -154,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/trilha': typeof TrilhaRoute
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
+  '/admin/atividades': typeof AuthenticatedAdminAtividadesRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
@@ -176,6 +184,7 @@ export interface FileRoutesByTo {
   '/trilha': typeof TrilhaRoute
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
+  '/admin/atividades': typeof AuthenticatedAdminAtividadesRoute
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
@@ -200,6 +209,7 @@ export interface FileRoutesById {
   '/trilha': typeof TrilhaRoute
   '/_authenticated/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
+  '/_authenticated/admin/atividades': typeof AuthenticatedAdminAtividadesRoute
   '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/_authenticated/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/trilha'
     | '/amigos'
     | '/licao/$lessonId'
+    | '/admin/atividades'
     | '/admin/pagamentos'
     | '/batalha/$battleId'
     | '/api/edu/chat'
@@ -246,6 +257,7 @@ export interface FileRouteTypes {
     | '/trilha'
     | '/amigos'
     | '/licao/$lessonId'
+    | '/admin/atividades'
     | '/admin/pagamentos'
     | '/batalha/$battleId'
     | '/api/edu/chat'
@@ -269,6 +281,7 @@ export interface FileRouteTypes {
     | '/trilha'
     | '/_authenticated/amigos'
     | '/licao/$lessonId'
+    | '/_authenticated/admin/atividades'
     | '/_authenticated/admin/pagamentos'
     | '/_authenticated/batalha/$battleId'
     | '/api/edu/chat'
@@ -411,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LicaoLessonIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/atividades': {
+      id: '/_authenticated/admin/atividades'
+      path: '/admin/atividades'
+      fullPath: '/admin/atividades'
+      preLoaderRoute: typeof AuthenticatedAdminAtividadesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/pagamentos': {
       id: '/_authenticated/admin/pagamentos'
       path: '/admin/pagamentos'
@@ -451,12 +471,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAmigosRoute: typeof AuthenticatedAmigosRoute
+  AuthenticatedAdminAtividadesRoute: typeof AuthenticatedAdminAtividadesRoute
   AuthenticatedAdminPagamentosRoute: typeof AuthenticatedAdminPagamentosRoute
   AuthenticatedBatalhaBattleIdRoute: typeof AuthenticatedBatalhaBattleIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAmigosRoute: AuthenticatedAmigosRoute,
+  AuthenticatedAdminAtividadesRoute: AuthenticatedAdminAtividadesRoute,
   AuthenticatedAdminPagamentosRoute: AuthenticatedAdminPagamentosRoute,
   AuthenticatedBatalhaBattleIdRoute: AuthenticatedBatalhaBattleIdRoute,
 }
