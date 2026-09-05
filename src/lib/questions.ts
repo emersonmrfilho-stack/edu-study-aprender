@@ -2,6 +2,13 @@ import { getGrade, parseLessonId, LESSONS_PER_UNIT, type Band } from "./curricul
 import { EXTRA_BANKS } from "./questions-extra";
 import { unitsFor } from "./curriculum";
 import { unitTopic, unitKeywords, topicScore, type TopicKey } from "./topics";
+import { langBanks } from "./questions-lang";
+
+/** Banco temático de idiomas (Inglês e Espanhol) ordenado pelo assunto da unidade. */
+function languageBank(subjectId: string, unitTitle: string): Exercise[] {
+  const { main, rest } = langBanks(subjectId, unitTitle);
+  return [...main, ...rest] as Exercise[];
+}
 
 export type Exercise =
   | { kind: "select"; prompt: string; options: string[]; answer: number; hint?: string; explanation?: string; image?: string }
@@ -1038,7 +1045,10 @@ export function exercisesForLesson(lessonId: string): Exercise[] {
     return out;
   }
 
-  const bank = bankForUnit(bankFor(ref.subjectId, grade.band), ref.unitTitle, EXERCISES_PER_LESSON);
+  const isLang = ref.subjectId === "ingles" || ref.subjectId === "espanhol";
+  const bank = isLang
+    ? languageBank(ref.subjectId, ref.unitTitle)
+    : bankForUnit(bankFor(ref.subjectId, grade.band), ref.unitTitle, EXERCISES_PER_LESSON);
   const ordinal = ref.unitIndex * LESSONS_PER_UNIT + ref.lessonIndex;
   return takeFromBank(bank, `${ref.gradeId}:${ref.subjectId}:${ref.unitIndex}:licao`, ordinal, EXERCISES_PER_LESSON);
 }
@@ -1063,11 +1073,14 @@ export function examExercises(gradeId: string, subjectId: string, unitIndex: num
     return out;
   }
 
-  const bank = bankForUnit(
-    bankFor(subjectId, grade.band),
-    unitTitleFor(gradeId, subjectId, unitIndex),
-    EXAM_QUESTIONS,
-  );
+  const isLang = subjectId === "ingles" || subjectId === "espanhol";
+  const bank = isLang
+    ? languageBank(subjectId, unitTitleFor(gradeId, subjectId, unitIndex))
+    : bankForUnit(
+        bankFor(subjectId, grade.band),
+        unitTitleFor(gradeId, subjectId, unitIndex),
+        EXAM_QUESTIONS,
+      );
   return takeFromBank(bank, `${gradeId}:${subjectId}:${unitIndex}:prova`, unitIndex, EXAM_QUESTIONS);
 }
 
@@ -1159,6 +1172,7 @@ export function lessonConcept(lessonId: string): {
     historia: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800&q=80",
     geografia: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&q=80",
     ingles: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&q=80",
+    espanhol: "https://images.unsplash.com/photo-1509840841025-9088ba78a826?w=800&q=80",
     fisica: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80",
     quimica: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80",
     biologia: "https://images.unsplash.com/photo-1530210124550-912dc1381cb8?w=800&q=80",

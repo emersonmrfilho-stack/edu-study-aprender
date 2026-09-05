@@ -166,7 +166,18 @@ const ING: UnitMap = {
   em3: ["ENEM English", "Cognates and false friends", "Argumentative texts", "Global issues", "Exam practice"],
 };
 
+const ESP: UnitMap = {
+  f6a: ["Saludos y presentaciones", "Números y fechas", "Colores y ropa", "La familia", "Animales y comida"],
+  f7a: ["Presente de indicativo", "La escuela", "Rutina diaria", "Presente continuo", "La ciudad"],
+  f8a: ["Pretérito indefinido", "Comparativos", "Verbos modales", "Comidas y bebidas", "Viajes"],
+  f9a: ["Futuro", "Pretérito perfecto", "Superlativos", "Expresiones idiomáticas", "Tecnología"],
+  em1: ["Repaso de tiempos verbales", "Estrategias de lectura", "Ampliación de vocabulario", "Condicionales", "Cultura hispánica"],
+  em2: ["Gramática avanzada", "Interpretación de textos", "Modismos", "Español académico", "Voz pasiva"],
+  em3: ["Español en el ENEM", "Falsos amigos", "Textos argumentativos", "Temas globales", "Práctica de examen"],
+};
+
 const FIS: UnitMap = {
+
   em1: ["Cinemática", "Leis de Newton", "Trabalho e energia", "Estática", "Hidrostática"],
   em2: ["Termologia", "Calorimetria", "Óptica", "Ondulatória", "Termodinâmica"],
   em3: ["Eletrostática", "Eletrodinâmica", "Magnetismo", "Física moderna", "Revisão ENEM"],
@@ -209,6 +220,8 @@ const UNITS: Record<string, UnitMap> = {
   historia: HIS,
   geografia: GEO,
   ingles: ING,
+  espanhol: ESP,
+
   fisica: FIS,
   quimica: QUI,
   biologia: BIO,

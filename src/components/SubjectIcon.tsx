@@ -22,6 +22,8 @@ const ICONS: Record<string, LucideIcon> = {
   historia: Landmark,
   geografia: Globe2,
   ingles: Languages,
+  espanhol: Languages,
+
   fisica: Magnet,
   quimica: Atom,
   biologia: Leaf,
