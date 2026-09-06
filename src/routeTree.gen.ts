@@ -25,6 +25,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TrilhaRouteImport } from './routes/trilha'
 import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated/amigos'
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminAtividadesRouteImport } from './routes/_authenticated/admin/atividades'
 import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
 import { Route as AuthenticatedBatalhaBattleIdRouteImport } from './routes/_authenticated/batalha.$battleId'
@@ -111,6 +112,11 @@ const LicaoLessonIdRoute = LicaoLessonIdRouteImport.update({
   path: '/licao/$lessonId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAdminAtividadesRoute =
   AuthenticatedAdminAtividadesRouteImport.update({
     id: '/admin/atividades',
@@ -167,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/api/edu/chat': typeof ApiEduChatRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/api/edu/chat': typeof ApiEduChatRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -215,6 +223,7 @@ export interface FileRoutesById {
   '/api/edu/chat': typeof ApiEduChatRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/api/edu/chat'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -263,6 +273,7 @@ export interface FileRouteTypes {
     | '/api/edu/chat'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -287,6 +298,7 @@ export interface FileRouteTypes {
     | '/api/edu/chat'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -424,6 +436,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LicaoLessonIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/atividades': {
       id: '/_authenticated/admin/atividades'
       path: '/admin/atividades'
@@ -474,6 +493,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminAtividadesRoute: typeof AuthenticatedAdminAtividadesRoute
   AuthenticatedAdminPagamentosRoute: typeof AuthenticatedAdminPagamentosRoute
   AuthenticatedBatalhaBattleIdRoute: typeof AuthenticatedBatalhaBattleIdRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -481,6 +501,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminAtividadesRoute: AuthenticatedAdminAtividadesRoute,
   AuthenticatedAdminPagamentosRoute: AuthenticatedAdminPagamentosRoute,
   AuthenticatedBatalhaBattleIdRoute: AuthenticatedBatalhaBattleIdRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

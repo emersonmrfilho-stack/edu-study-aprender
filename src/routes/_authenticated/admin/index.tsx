@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, BookOpenCheck, CreditCard, Mascot } from "lucide-react";
+import { ArrowLeft, BookOpenCheck, CreditCard } from "lucide-react";
+import { Mascot } from "@/components/Mascot";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   staticData: { sitemap: false },
