@@ -10,9 +10,7 @@ import {
   Heart,
   LogOut,
   Moon,
-  Settings,
   ShoppingBag,
-
   Sun,
   Trophy,
   Volume2,
