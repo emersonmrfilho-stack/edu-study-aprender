@@ -47,10 +47,10 @@ function AdminPaymentsPage() {
         </div>
 
         <Link
-          to="/"
+          to="/admin"
           className="mb-4 inline-flex items-center gap-1 text-sm font-extrabold uppercase text-muted-foreground"
         >
-          <ArrowLeft className="h-4 w-4" /> Voltar
+          <ArrowLeft className="h-4 w-4" /> Voltar ao painel
         </Link>
 
         {isLoading && (

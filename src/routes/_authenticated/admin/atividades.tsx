@@ -138,8 +138,8 @@ function AtividadesPage() {
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-2xl px-4 pb-28 pt-6">
-      <Link to="/perfil" className="mb-4 inline-flex items-center gap-2 font-black uppercase text-muted-foreground">
-        <ArrowLeft className="h-5 w-5" strokeWidth={3} /> Voltar
+      <Link to="/admin" className="mb-4 inline-flex items-center gap-2 font-black uppercase text-muted-foreground">
+        <ArrowLeft className="h-5 w-5" strokeWidth={3} /> Voltar ao painel
       </Link>
       <h1 className="text-2xl font-black">Gerenciar atividades</h1>
       <p className="mt-1 text-sm font-bold text-muted-foreground">
