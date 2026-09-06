@@ -17,31 +17,32 @@ export type CustomActivity = {
 
 function asRow(r: Record<string, unknown>): CustomActivity {
   return {
-    id: String(r.id),
-    grade_id: String(r.grade_id),
-    subject_id: String(r.subject_id),
-    unit_index: Number(r.unit_index ?? 0),
-    kind: String(r.kind ?? "select"),
-    prompt: String(r.prompt ?? ""),
-    options: Array.isArray(r.options) ? (r.options as string[]).map(String) : [],
-    answer_index: Number(r.answer_index ?? 0),
-    answer_text: (r.answer_text as string | null) ?? null,
-    answer_bool: (r.answer_bool as boolean | null) ?? null,
-    explanation: (r.explanation as string | null) ?? null,
+    id: String(r["id"]),
+    grade_id: String(r["grade_id"]),
+    subject_id: String(r["subject_id"]),
+    unit_index: Number(r["unit_index"] ?? 0),
+    kind: String(r["kind"] ?? "select"),
+    prompt: String(r["prompt"] ?? ""),
+    options: Array.isArray(r["options"]) ? (r["options"] as string[]).map(String) : [],
+    answer_index: Number(r["answer_index"] ?? 0),
+    answer_text: (r["answer_text"] as string | null) ?? null,
+    answer_bool: (r["answer_bool"] as boolean | null) ?? null,
+    explanation: (r["explanation"] as string | null) ?? null,
   };
 }
 
 /** Converte uma atividade do painel em exercício jogável. */
 export function toExercise(a: CustomActivity): Exercise {
   const explanation = a.explanation ?? undefined;
+  const explanationProp = explanation ? { explanation } : undefined;
   if (a.kind === "truefalse") {
-    return { kind: "truefalse", prompt: a.prompt, answer: a.answer_bool ?? true, explanation };
+    return { kind: "truefalse", prompt: a.prompt, answer: a.answer_bool ?? true, ...explanationProp };
   }
   if (a.kind === "type") {
-    return { kind: "type", prompt: a.prompt, answer: a.answer_text ?? "", explanation };
+    return { kind: "type", prompt: a.prompt, answer: a.answer_text ?? "", ...explanationProp };
   }
   if (a.kind === "assemble") {
-    return { kind: "assemble", prompt: a.prompt, sentence: a.answer_text ?? "", explanation };
+    return { kind: "assemble", prompt: a.prompt, sentence: a.answer_text ?? "", ...explanationProp };
   }
   const options = a.options.length >= 2 ? a.options : ["Verdadeiro", "Falso"];
   return {
@@ -49,7 +50,7 @@ export function toExercise(a: CustomActivity): Exercise {
     prompt: a.prompt,
     options,
     answer: Math.min(Math.max(a.answer_index, 0), options.length - 1),
-    explanation,
+    ...explanationProp,
   };
 }
 
