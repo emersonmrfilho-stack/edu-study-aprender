@@ -1,5 +1,5 @@
 ## Tarefas
-- [ ] Cadastrar produto Premium no provedor de pagamento
-- [ ] Checkout embutido substituindo o PicPay
-- [ ] Webhook e liberacao automatica do Premium
-- [ ] Definir regras de compra/assinatura/cancelamento com a usuaria
+- [x] Cadastrar produto Premium no provedor de pagamento
+- [ ] Criar endereço público seguro para o webhook da Kiwify
+- [ ] Ligar compra aprovada da Kiwify à liberação automática do Premium
+- [ ] Configurar e testar o token compartilhado da Kiwify
