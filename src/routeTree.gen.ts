@@ -30,6 +30,7 @@ import { Route as AuthenticatedAdminAtividadesRouteImport } from './routes/_auth
 import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
 import { Route as AuthenticatedBatalhaBattleIdRouteImport } from './routes/_authenticated/batalha.$battleId'
 import { Route as ApiEduChatRouteImport } from './routes/api/edu/chat'
+import { Route as ApiPublicKiwifyRouteImport } from './routes/api/public/kiwify'
 import { Route as ApiPublicPicpayRouteImport } from './routes/api/public/picpay'
 import { Route as ProvaSubjectIdUnitIndexRouteImport } from './routes/prova.$subjectId.$unitIndex'
 
@@ -140,6 +141,11 @@ const ApiEduChatRoute = ApiEduChatRouteImport.update({
   path: '/api/edu/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicKiwifyRoute = ApiPublicKiwifyRouteImport.update({
+  id: '/api/public/kiwify',
+  path: '/api/public/kiwify',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPicpayRoute = ApiPublicPicpayRouteImport.update({
   id: '/api/public/picpay',
   path: '/api/public/picpay',
@@ -171,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
+  '/api/public/kiwify': typeof ApiPublicKiwifyRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -195,6 +202,7 @@ export interface FileRoutesByTo {
   '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
+  '/api/public/kiwify': typeof ApiPublicKiwifyRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -221,6 +229,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/_authenticated/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
+  '/api/public/kiwify': typeof ApiPublicKiwifyRoute
   '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -247,6 +256,7 @@ export interface FileRouteTypes {
     | '/admin/pagamentos'
     | '/batalha/$battleId'
     | '/api/edu/chat'
+    | '/api/public/kiwify'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
     | '/admin/'
@@ -271,6 +281,7 @@ export interface FileRouteTypes {
     | '/admin/pagamentos'
     | '/batalha/$battleId'
     | '/api/edu/chat'
+    | '/api/public/kiwify'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
     | '/admin'
@@ -296,6 +307,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/pagamentos'
     | '/_authenticated/batalha/$battleId'
     | '/api/edu/chat'
+    | '/api/public/kiwify'
     | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
     | '/_authenticated/admin/'
@@ -318,6 +330,7 @@ export interface RootRouteChildren {
   TrilhaRoute: typeof TrilhaRoute
   LicaoLessonIdRoute: typeof LicaoLessonIdRoute
   ApiEduChatRoute: typeof ApiEduChatRoute
+  ApiPublicKiwifyRoute: typeof ApiPublicKiwifyRoute
   ApiPublicPicpayRoute: typeof ApiPublicPicpayRoute
   ProvaSubjectIdUnitIndexRoute: typeof ProvaSubjectIdUnitIndexRoute
 }
@@ -471,6 +484,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiEduChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/kiwify': {
+      id: '/api/public/kiwify'
+      path: '/api/public/kiwify'
+      fullPath: '/api/public/kiwify'
+      preLoaderRoute: typeof ApiPublicKiwifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/picpay': {
       id: '/api/public/picpay'
       path: '/api/public/picpay'
@@ -525,6 +545,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrilhaRoute: TrilhaRoute,
   LicaoLessonIdRoute: LicaoLessonIdRoute,
   ApiEduChatRoute: ApiEduChatRoute,
+  ApiPublicKiwifyRoute: ApiPublicKiwifyRoute,
   ApiPublicPicpayRoute: ApiPublicPicpayRoute,
   ProvaSubjectIdUnitIndexRoute: ProvaSubjectIdUnitIndexRoute,
 }
