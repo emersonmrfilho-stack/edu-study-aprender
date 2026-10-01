@@ -27,11 +27,8 @@ import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminAtividadesRouteImport } from './routes/_authenticated/admin/atividades'
-import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin/pagamentos'
 import { Route as AuthenticatedBatalhaBattleIdRouteImport } from './routes/_authenticated/batalha.$battleId'
 import { Route as ApiEduChatRouteImport } from './routes/api/edu/chat'
-import { Route as ApiPublicKiwifyRouteImport } from './routes/api/public/kiwify'
-import { Route as ApiPublicPicpayRouteImport } from './routes/api/public/picpay'
 import { Route as ProvaSubjectIdUnitIndexRouteImport } from './routes/prova.$subjectId.$unitIndex'
 
 const IndexRoute = IndexRouteImport.update({
@@ -124,12 +121,6 @@ const AuthenticatedAdminAtividadesRoute =
     path: '/admin/atividades',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAdminPagamentosRoute =
-  AuthenticatedAdminPagamentosRouteImport.update({
-    id: '/admin/pagamentos',
-    path: '/admin/pagamentos',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedBatalhaBattleIdRoute =
   AuthenticatedBatalhaBattleIdRouteImport.update({
     id: '/batalha/$battleId',
@@ -139,16 +130,6 @@ const AuthenticatedBatalhaBattleIdRoute =
 const ApiEduChatRoute = ApiEduChatRouteImport.update({
   id: '/api/edu/chat',
   path: '/api/edu/chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicKiwifyRoute = ApiPublicKiwifyRouteImport.update({
-  id: '/api/public/kiwify',
-  path: '/api/public/kiwify',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicPicpayRoute = ApiPublicPicpayRouteImport.update({
-  id: '/api/public/picpay',
-  path: '/api/public/picpay',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProvaSubjectIdUnitIndexRoute = ProvaSubjectIdUnitIndexRouteImport.update({
@@ -174,11 +155,8 @@ export interface FileRoutesByFullPath {
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/atividades': typeof AuthenticatedAdminAtividadesRoute
-  '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
-  '/api/public/kiwify': typeof ApiPublicKiwifyRoute
-  '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -199,11 +177,8 @@ export interface FileRoutesByTo {
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/atividades': typeof AuthenticatedAdminAtividadesRoute
-  '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
-  '/api/public/kiwify': typeof ApiPublicKiwifyRoute
-  '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
@@ -226,11 +201,8 @@ export interface FileRoutesById {
   '/_authenticated/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/_authenticated/admin/atividades': typeof AuthenticatedAdminAtividadesRoute
-  '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
   '/_authenticated/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
-  '/api/public/kiwify': typeof ApiPublicKiwifyRoute
-  '/api/public/picpay': typeof ApiPublicPicpayRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -253,11 +225,8 @@ export interface FileRouteTypes {
     | '/amigos'
     | '/licao/$lessonId'
     | '/admin/atividades'
-    | '/admin/pagamentos'
     | '/batalha/$battleId'
     | '/api/edu/chat'
-    | '/api/public/kiwify'
-    | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -278,11 +247,8 @@ export interface FileRouteTypes {
     | '/amigos'
     | '/licao/$lessonId'
     | '/admin/atividades'
-    | '/admin/pagamentos'
     | '/batalha/$battleId'
     | '/api/edu/chat'
-    | '/api/public/kiwify'
-    | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
     | '/admin'
   id:
@@ -304,11 +270,8 @@ export interface FileRouteTypes {
     | '/_authenticated/amigos'
     | '/licao/$lessonId'
     | '/_authenticated/admin/atividades'
-    | '/_authenticated/admin/pagamentos'
     | '/_authenticated/batalha/$battleId'
     | '/api/edu/chat'
-    | '/api/public/kiwify'
-    | '/api/public/picpay'
     | '/prova/$subjectId/$unitIndex'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
@@ -330,8 +293,6 @@ export interface RootRouteChildren {
   TrilhaRoute: typeof TrilhaRoute
   LicaoLessonIdRoute: typeof LicaoLessonIdRoute
   ApiEduChatRoute: typeof ApiEduChatRoute
-  ApiPublicKiwifyRoute: typeof ApiPublicKiwifyRoute
-  ApiPublicPicpayRoute: typeof ApiPublicPicpayRoute
   ProvaSubjectIdUnitIndexRoute: typeof ProvaSubjectIdUnitIndexRoute
 }
 
@@ -463,13 +424,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAtividadesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/pagamentos': {
-      id: '/_authenticated/admin/pagamentos'
-      path: '/admin/pagamentos'
-      fullPath: '/admin/pagamentos'
-      preLoaderRoute: typeof AuthenticatedAdminPagamentosRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/batalha/$battleId': {
       id: '/_authenticated/batalha/$battleId'
       path: '/batalha/$battleId'
@@ -482,20 +436,6 @@ declare module '@tanstack/react-router' {
       path: '/api/edu/chat'
       fullPath: '/api/edu/chat'
       preLoaderRoute: typeof ApiEduChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/kiwify': {
-      id: '/api/public/kiwify'
-      path: '/api/public/kiwify'
-      fullPath: '/api/public/kiwify'
-      preLoaderRoute: typeof ApiPublicKiwifyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/picpay': {
-      id: '/api/public/picpay'
-      path: '/api/public/picpay'
-      fullPath: '/api/public/picpay'
-      preLoaderRoute: typeof ApiPublicPicpayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/prova/$subjectId/$unitIndex': {
@@ -511,7 +451,6 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedAmigosRoute: typeof AuthenticatedAmigosRoute
   AuthenticatedAdminAtividadesRoute: typeof AuthenticatedAdminAtividadesRoute
-  AuthenticatedAdminPagamentosRoute: typeof AuthenticatedAdminPagamentosRoute
   AuthenticatedBatalhaBattleIdRoute: typeof AuthenticatedBatalhaBattleIdRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
@@ -519,7 +458,6 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAmigosRoute: AuthenticatedAmigosRoute,
   AuthenticatedAdminAtividadesRoute: AuthenticatedAdminAtividadesRoute,
-  AuthenticatedAdminPagamentosRoute: AuthenticatedAdminPagamentosRoute,
   AuthenticatedBatalhaBattleIdRoute: AuthenticatedBatalhaBattleIdRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
@@ -545,8 +483,6 @@ const rootRouteChildren: RootRouteChildren = {
   TrilhaRoute: TrilhaRoute,
   LicaoLessonIdRoute: LicaoLessonIdRoute,
   ApiEduChatRoute: ApiEduChatRoute,
-  ApiPublicKiwifyRoute: ApiPublicKiwifyRoute,
-  ApiPublicPicpayRoute: ApiPublicPicpayRoute,
   ProvaSubjectIdUnitIndexRoute: ProvaSubjectIdUnitIndexRoute,
 }
 export const routeTree = rootRouteImport
