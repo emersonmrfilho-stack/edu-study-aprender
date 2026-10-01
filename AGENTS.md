@@ -9,4 +9,4 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-- Kiwify callbacks use `/api/public/kiwify` with `KIWIFY_WEBHOOK_TOKEN`; the shared token prevents forged Premium approvals.
+- Premium is sold through the existing PicPay payment link; never grant access from a browser-side claim or manual receipt.
