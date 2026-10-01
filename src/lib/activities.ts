@@ -69,7 +69,11 @@ export async function listActivities(filter?: {
 }
 
 export async function createActivity(input: Omit<CustomActivity, "id">) {
-  const { error } = await supabase.from("custom_activities").insert(input);
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  if (authError || !authData.user) throw authError ?? new Error("Faça login para criar atividades.");
+  const { error } = await supabase
+    .from("custom_activities")
+    .insert({ ...input, created_by: authData.user.id });
   if (error) throw error;
 }
 
@@ -86,8 +90,13 @@ export async function deleteActivity(id: string) {
 /** Exercícios personalizados de uma lição (mesclados aos gerados). */
 export async function customExercisesFor(gradeId: string, subjectId: string, unitIndex: number): Promise<Exercise[]> {
   try {
-    const rows = await listActivities({ gradeId, subjectId, unitIndex });
-    return rows.map(toExercise);
+    const { data, error } = await supabase.rpc("get_custom_activities", {
+      _grade_id: gradeId,
+      _subject_id: subjectId,
+      _unit_index: unitIndex,
+    });
+    if (error) throw error;
+    return (data ?? []).map((row) => toExercise(asRow(row as Record<string, unknown>)));
   } catch {
     return [];
   }
