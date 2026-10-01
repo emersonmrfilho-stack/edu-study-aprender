@@ -41,8 +41,8 @@ function PremiumAdminPage() {
   const [selectedPurchase, setSelectedPurchase] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState("");
   const [testMode, setTestMode] = useState<TestMode | null>(null);
-  const purchasesQuery = useQuery({ queryKey: ["admin-premium-purchases"], queryFn: fetchPurchases });
-  const usersQuery = useQuery({ queryKey: ["admin-premium-users"], queryFn: fetchUsers });
+  const purchasesQuery = useQuery({ queryKey: ["admin-premium-purchases"], queryFn: fetchPurchases, retry: false });
+  const usersQuery = useQuery({ queryKey: ["admin-premium-users"], queryFn: fetchUsers, retry: false });
   const refresh = () => queryClient.invalidateQueries({ queryKey: ["admin-premium-purchases"] });
   const approveMutation = useMutation({
     mutationFn: (purchaseId: string) => approve({ data: { purchaseId } }),
@@ -65,7 +65,8 @@ function PremiumAdminPage() {
   }, [purchasesQuery.data, search, status]);
   const testPurchases = (purchasesQuery.data ?? []).filter((purchase) => purchase.test_mode !== null);
   const selectedProfile = (usersQuery.data ?? []).find((profile) => profile.user_id === selectedUser);
-  const accessDenied = purchasesQuery.isError && String(purchasesQuery.error).includes("administradores");
+  const purchaseError = purchasesQuery.error instanceof Error ? purchasesQuery.error.message : "";
+  const accessDenied = purchasesQuery.isError && purchaseError.includes("administradores");
 
   if (accessDenied) return <main className="mx-auto min-h-screen w-full max-w-2xl px-4 py-8"><ShieldCheck className="h-10 w-10 text-destructive" /><h1 className="mt-4 text-2xl font-black">Acesso restrito</h1><p className="mt-2 font-bold text-muted-foreground">Somente administradores podem consultar ou alterar compras.</p><Button asChild variant="outline" className="mt-5"><Link to="/perfil">Voltar ao perfil</Link></Button></main>;
 
