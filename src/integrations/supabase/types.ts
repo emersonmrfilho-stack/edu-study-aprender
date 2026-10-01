@@ -156,7 +156,9 @@ export type Database = {
           id: string
           provider: string
           receipt_path: string | null
+          release_source: string
           status: Database["public"]["Enums"]["purchase_status"]
+          test_mode: string | null
           updated_at: string
           user_id: string
         }
@@ -169,7 +171,9 @@ export type Database = {
           id?: string
           provider?: string
           receipt_path?: string | null
+          release_source?: string
           status?: Database["public"]["Enums"]["purchase_status"]
+          test_mode?: string | null
           updated_at?: string
           user_id: string
         }
@@ -182,7 +186,9 @@ export type Database = {
           id?: string
           provider?: string
           receipt_path?: string | null
+          release_source?: string
           status?: Database["public"]["Enums"]["purchase_status"]
+          test_mode?: string | null
           updated_at?: string
           user_id?: string
         }

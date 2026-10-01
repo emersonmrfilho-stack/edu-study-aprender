@@ -27,6 +27,7 @@ import { Route as AuthenticatedAmigosRouteImport } from './routes/_authenticated
 import { Route as LicaoLessonIdRouteImport } from './routes/licao.$lessonId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminAtividadesRouteImport } from './routes/_authenticated/admin/atividades'
+import { Route as AuthenticatedAdminPremiumRouteImport } from './routes/_authenticated/admin/premium'
 import { Route as AuthenticatedBatalhaBattleIdRouteImport } from './routes/_authenticated/batalha.$battleId'
 import { Route as ApiEduChatRouteImport } from './routes/api/edu/chat'
 import { Route as ProvaSubjectIdUnitIndexRouteImport } from './routes/prova.$subjectId.$unitIndex'
@@ -121,6 +122,12 @@ const AuthenticatedAdminAtividadesRoute =
     path: '/admin/atividades',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminPremiumRoute =
+  AuthenticatedAdminPremiumRouteImport.update({
+    id: '/admin/premium',
+    path: '/admin/premium',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedBatalhaBattleIdRoute =
   AuthenticatedBatalhaBattleIdRouteImport.update({
     id: '/batalha/$battleId',
@@ -155,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/atividades': typeof AuthenticatedAdminAtividadesRoute
+  '/admin/premium': typeof AuthenticatedAdminPremiumRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
@@ -177,6 +185,7 @@ export interface FileRoutesByTo {
   '/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/admin/atividades': typeof AuthenticatedAdminAtividadesRoute
+  '/admin/premium': typeof AuthenticatedAdminPremiumRoute
   '/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
@@ -201,6 +210,7 @@ export interface FileRoutesById {
   '/_authenticated/amigos': typeof AuthenticatedAmigosRoute
   '/licao/$lessonId': typeof LicaoLessonIdRoute
   '/_authenticated/admin/atividades': typeof AuthenticatedAdminAtividadesRoute
+  '/_authenticated/admin/premium': typeof AuthenticatedAdminPremiumRoute
   '/_authenticated/batalha/$battleId': typeof AuthenticatedBatalhaBattleIdRoute
   '/api/edu/chat': typeof ApiEduChatRoute
   '/prova/$subjectId/$unitIndex': typeof ProvaSubjectIdUnitIndexRoute
@@ -225,6 +235,7 @@ export interface FileRouteTypes {
     | '/amigos'
     | '/licao/$lessonId'
     | '/admin/atividades'
+    | '/admin/premium'
     | '/batalha/$battleId'
     | '/api/edu/chat'
     | '/prova/$subjectId/$unitIndex'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/amigos'
     | '/licao/$lessonId'
     | '/admin/atividades'
+    | '/admin/premium'
     | '/batalha/$battleId'
     | '/api/edu/chat'
     | '/prova/$subjectId/$unitIndex'
@@ -270,6 +282,7 @@ export interface FileRouteTypes {
     | '/_authenticated/amigos'
     | '/licao/$lessonId'
     | '/_authenticated/admin/atividades'
+    | '/_authenticated/admin/premium'
     | '/_authenticated/batalha/$battleId'
     | '/api/edu/chat'
     | '/prova/$subjectId/$unitIndex'
@@ -424,6 +437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAtividadesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/premium': {
+      id: '/_authenticated/admin/premium'
+      path: '/admin/premium'
+      fullPath: '/admin/premium'
+      preLoaderRoute: typeof AuthenticatedAdminPremiumRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/batalha/$battleId': {
       id: '/_authenticated/batalha/$battleId'
       path: '/batalha/$battleId'
@@ -451,6 +471,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedAmigosRoute: typeof AuthenticatedAmigosRoute
   AuthenticatedAdminAtividadesRoute: typeof AuthenticatedAdminAtividadesRoute
+  AuthenticatedAdminPremiumRoute: typeof AuthenticatedAdminPremiumRoute
   AuthenticatedBatalhaBattleIdRoute: typeof AuthenticatedBatalhaBattleIdRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
@@ -458,6 +479,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAmigosRoute: AuthenticatedAmigosRoute,
   AuthenticatedAdminAtividadesRoute: AuthenticatedAdminAtividadesRoute,
+  AuthenticatedAdminPremiumRoute: AuthenticatedAdminPremiumRoute,
   AuthenticatedBatalhaBattleIdRoute: AuthenticatedBatalhaBattleIdRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }

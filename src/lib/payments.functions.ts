@@ -44,6 +44,7 @@ export const getLatestPurchase = createServerFn({ method: "GET" })
       .from("premium_purchases")
       .select()
       .eq("user_id", context.userId)
+      .or("test_mode.is.null,test_mode.eq.real")
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();

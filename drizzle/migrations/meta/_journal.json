@@ -8,6 +8,13 @@
       "when": 1788481869903,
       "tag": "0000_create_custom_activities",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790873158630,
+      "tag": "0001_add_premium_purchase_audit_and_tests",
+      "breakpoints": true
     }
   ]
 }
