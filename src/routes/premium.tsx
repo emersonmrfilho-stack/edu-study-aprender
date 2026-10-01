@@ -1,14 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Check, Crown, Heart, Infinity as InfinityIcon, Sparkles, Zap, Loader2, ExternalLink, Upload, Clock, FileCheck2 } from "lucide-react";
+import { Check, Crown, Heart, Infinity as InfinityIcon, Sparkles, Zap, Loader2, ExternalLink, Clock } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { Mascot } from "@/components/Mascot";
 import { PREMIUM_PRICE_LABEL, useStore } from "@/lib/store";
 import { useServerFn } from "@tanstack/react-start";
-import { getPicPayLink, createPurchase, getLatestPurchase, attachReceipt } from "@/lib/payments.functions";
-import { supabase } from "@/integrations/supabase/client";
+import { getPicPayLink, createPurchase, getLatestPurchase } from "@/lib/payments.functions";
 import { useAuth } from "@/hooks/useAuth";
 
 
@@ -46,14 +45,10 @@ function Premium() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [polling, setPolling] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const fetchLink = useServerFn(getPicPayLink);
   const create = useServerFn(createPurchase);
   const fetchLatest = useServerFn(getLatestPurchase);
-  const attach = useServerFn(attachReceipt);
 
   const { data: picpay } = useQuery({
     queryKey: ["picpay-link"],
@@ -78,28 +73,6 @@ function Premium() {
   const isPremium = state.premium;
   const pending = latestPurchase?.status === "pending";
   const rejected = latestPurchase?.status === "rejected";
-
-  async function handleUpload(file: File) {
-    if (!user || !latestPurchase) return;
-    setUploadError(null);
-    setUploading(true);
-    try {
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-      const path = `${user.id}/${latestPurchase.id}-${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from("comprovantes").upload(path, file, {
-        upsert: true,
-        contentType: file.type || "application/octet-stream",
-      });
-      if (error) throw new Error(error.message);
-      await attach({ data: { purchaseId: latestPurchase.id, receiptPath: path } });
-      await refetchLatest();
-      setPolling(true);
-    } catch (e) {
-      setUploadError(e instanceof Error ? e.message : "Não foi possível enviar o comprovante.");
-    } finally {
-      setUploading(false);
-    }
-  }
 
   useEffect(() => {
     if (!polling && !pending) return;
@@ -181,13 +154,11 @@ function Premium() {
             )}
             <p className="mt-3 flex items-start gap-2 rounded-2xl border-2 border-border bg-card p-3 text-left text-xs font-bold text-muted-foreground">
               <Clock className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={3} />
-              Após pagar, anexe o comprovante aqui. A liberação é feita por{" "}
-              <strong className="font-black">aprovação manual da nossa equipe</strong>, então pode
-              demorar um pouco (normalmente até 24h).
+              O Premium só será liberado depois que o pagamento for confirmado pelo sistema.
             </p>
             {rejected && (
               <p className="mt-2 text-xs font-black text-wrong-foreground">
-                Seu último comprovante foi recusado. Envie um novo pagamento e comprovante válidos.
+                O último pagamento não foi confirmado. Tente novamente.
               </p>
             )}
           </div>
@@ -196,49 +167,10 @@ function Premium() {
         {!isPremium && pending && (
           <div className="mt-6 rounded-3xl border-2 border-gem/50 bg-gem/10 p-5 text-center">
             <Loader2 className="mx-auto h-8 w-8 animate-spin text-gem" />
-            <p className="mt-3 font-black text-gem">
-              {latestPurchase?.receipt_path ? "Comprovante em análise..." : "Aguardando comprovante"}
-            </p>
+            <p className="mt-3 font-black text-gem">Aguardando confirmação do pagamento</p>
             <p className="text-sm font-bold text-muted-foreground">
-              {latestPurchase?.receipt_path
-                ? "Recebemos seu comprovante! A aprovação é manual, feita por uma pessoa da nossa equipe, e pode demorar um pouco (normalmente até 24h). Assim que aprovado, o Premium libera automaticamente."
-                : "Já pagou? Anexe o comprovante abaixo para que possamos conferir. A aprovação é manual e pode demorar um pouco."}
+              Assim que o sistema receber a confirmação, o Premium será liberado automaticamente.
             </p>
-
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*,application/pdf"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) void handleUpload(file);
-                e.target.value = "";
-              }}
-            />
-            <button
-              disabled={uploading}
-              onClick={() => fileRef.current?.click()}
-              className="btn-3d mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-primary/60 bg-primary px-4 py-4 text-sm font-black uppercase tracking-wide text-primary-foreground disabled:opacity-60"
-            >
-              {uploading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : latestPurchase?.receipt_path ? (
-                <>
-                  <FileCheck2 className="h-5 w-5" /> Enviar outro comprovante
-                </>
-              ) : (
-                <>
-                  <Upload className="h-5 w-5" /> Anexar comprovante
-                </>
-              )}
-            </button>
-            <p className="mt-2 text-xs font-bold text-muted-foreground">
-              Aceitamos imagem (print do PicPay) ou PDF, até 10 MB.
-            </p>
-            {uploadError && (
-              <p className="mt-2 text-xs font-black text-wrong-foreground">{uploadError}</p>
-            )}
 
             <a
               href={picpay?.link || "https://link.picpay.com/p/17876661506a8d9ee6bbcca"}

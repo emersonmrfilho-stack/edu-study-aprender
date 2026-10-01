@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, BookOpenCheck, CreditCard } from "lucide-react";
+import { ArrowLeft, BookOpenCheck } from "lucide-react";
 import { Mascot } from "@/components/Mascot";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
@@ -7,9 +7,9 @@ export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({
     meta: [
       { title: "Painel admin — Edu Study" },
-      { name: "description", content: "Painel administrativo do Edu Study para gerenciar atividades e aprovar pagamentos." },
+      { name: "description", content: "Painel administrativo do Edu Study para gerenciar atividades." },
       { property: "og:title", content: "Painel admin — Edu Study" },
-      { property: "og:description", content: "Gerencie atividades e pagamentos do Edu Study." },
+      { property: "og:description", content: "Gerencie atividades do Edu Study." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -28,15 +28,6 @@ function AdminIndexPage() {
       bg: "bg-primary/10",
       border: "border-primary/40",
     },
-    {
-      to: "/admin/pagamentos",
-      Icon: CreditCard,
-      title: "Pagamentos",
-      description: "Aprove ou rejeite compras Premium pendentes.",
-      color: "text-gem",
-      bg: "bg-gem/10",
-      border: "border-gem/40",
-    },
   ];
 
   return (
@@ -46,7 +37,7 @@ function AdminIndexPage() {
           <Mascot size={64} />
           <div>
             <h1 className="text-xl font-black">Painel admin</h1>
-            <p className="text-sm font-bold text-muted-foreground">Gerencie atividades e pagamentos.</p>
+            <p className="text-sm font-bold text-muted-foreground">Gerencie as atividades.</p>
           </div>
         </div>
 
