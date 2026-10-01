@@ -268,7 +268,62 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_custom_activities: {
+        Args: { _grade_id: string; _subject_id: string; _unit_index: number }
+        Returns: {
+          answer_bool: boolean | null
+          answer_index: number
+          answer_text: string | null
+          created_at: string
+          created_by: string | null
+          explanation: string | null
+          grade_id: string
+          id: string
+          kind: string
+          options: Json
+          prompt: string
+          subject_id: string
+          unit_index: number
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "custom_activities"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      get_public_leaderboard: {
+        Args: never
+        Returns: {
+          display_name: string
+          grade_id: string
+          user_id: string
+          username: string
+          xp: number
+        }[]
+      }
+      get_public_profiles: {
+        Args: { _user_ids: string[] }
+        Returns: {
+          display_name: string
+          grade_id: string
+          user_id: string
+          username: string
+          xp: number
+        }[]
+      }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      search_public_profiles: {
+        Args: { _exclude_user_id: string; _query: string }
+        Returns: {
+          display_name: string
+          grade_id: string
+          user_id: string
+          username: string
+          xp: number
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
