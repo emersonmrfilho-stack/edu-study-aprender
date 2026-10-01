@@ -70,13 +70,10 @@ export const searchProfiles = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ q: z.string().trim().min(2).max(40) }).parse(data))
   .handler(async ({ data, context }) => {
-    const term = data.q.replace(/[%,]/g, "");
-    const { data: rows, error } = await context.supabase
-      .from("profiles")
-      .select("user_id, username, display_name, grade_id, xp")
-      .or(`username.ilike.%${term}%,display_name.ilike.%${term}%`)
-      .neq("user_id", context.userId)
-      .limit(20);
+    const { data: rows, error } = await context.supabase.rpc("search_public_profiles", {
+      _query: data.q,
+      _exclude_user_id: context.userId,
+    });
     if (error) throw new Error(error.message);
     return (rows as PublicProfile[]) ?? [];
   });
@@ -97,10 +94,9 @@ export const listFriends = createServerFn({ method: "GET" })
     );
     let profiles: PublicProfile[] = [];
     if (otherIds.length > 0) {
-      const { data: profs, error: pErr } = await context.supabase
-        .from("profiles")
-        .select("user_id, username, display_name, grade_id, xp")
-        .in("user_id", otherIds);
+      const { data: profs, error: pErr } = await context.supabase.rpc("get_public_profiles", {
+        _user_ids: otherIds,
+      });
       if (pErr) throw new Error(pErr.message);
       profiles = (profs as PublicProfile[]) ?? [];
     }
@@ -219,10 +215,9 @@ export const listBattles = createServerFn({ method: "GET" })
     );
     let profiles: PublicProfile[] = [];
     if (ids.length > 0) {
-      const { data: profs } = await context.supabase
-        .from("profiles")
-        .select("user_id, username, display_name, grade_id, xp")
-        .in("user_id", ids);
+      const { data: profs } = await context.supabase.rpc("get_public_profiles", {
+        _user_ids: ids,
+      });
       profiles = (profs as PublicProfile[]) ?? [];
     }
     return battles.map((b) => {
@@ -254,11 +249,11 @@ export const getBattle = createServerFn({ method: "POST" })
     const b = row as Tables<"battles">;
     const iAmChallenger = b.challenger_id === context.userId;
     const otherId = iAmChallenger ? b.opponent_id : b.challenger_id;
-    const { data: prof } = await context.supabase
-      .from("profiles")
-      .select("user_id, username, display_name, grade_id, xp")
-      .eq("user_id", otherId)
-      .maybeSingle();
+    const { data: profiles, error: profileError } = await context.supabase.rpc("get_public_profiles", {
+      _user_ids: [otherId],
+    });
+    if (profileError) throw new Error(profileError.message);
+    const prof = profiles?.[0] ?? null;
     return {
       battle: b,
       iAmChallenger,
@@ -318,11 +313,7 @@ export const submitBattleScore = createServerFn({ method: "POST" })
 export const getLeaderboard = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data, error } = await context.supabase
-      .from("profiles")
-      .select("user_id, username, display_name, grade_id, xp")
-      .order("xp", { ascending: false })
-      .limit(50);
+    const { data, error } = await context.supabase.rpc("get_public_leaderboard");
     if (error) throw new Error(error.message);
     return {
       me: context.userId,
