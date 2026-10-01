@@ -1,7 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import type { Tables, TablesInsert } from "@/integrations/supabase/types";
+import type { Database, Tables, TablesInsert } from "@/integrations/supabase/types";
 
 const PREMIUM_AMOUNT = 24.9;
 
@@ -13,7 +14,7 @@ export type AdminPurchase = Purchase & {
 };
 
 async function assertAdmin(
-  supabase: Parameters<Parameters<typeof requireSupabaseAuth>["options"]["server"]>[0]["context"]["supabase"],
+  supabase: SupabaseClient<Database>,
   userId: string,
 ) {
   const { data, error } = await supabase.rpc("is_admin", { _user_id: userId });

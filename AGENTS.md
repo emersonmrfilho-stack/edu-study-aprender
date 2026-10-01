@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Premium is sold through the existing PicPay payment link; never grant access from a browser-side claim or manual receipt.
+- Premium admin actions use authenticated server functions, verify the admin role before privileged access, and isolate simulations from real purchases.

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, BookOpenCheck } from "lucide-react";
+import { ArrowLeft, BookOpenCheck, Crown } from "lucide-react";
 import { Mascot } from "@/components/Mascot";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
@@ -7,9 +7,9 @@ export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({
     meta: [
       { title: "Painel admin — Edu Study" },
-      { name: "description", content: "Painel administrativo do Edu Study para gerenciar atividades." },
+      { name: "description", content: "Painel administrativo do Edu Study para gerenciar atividades e Premium." },
       { property: "og:title", content: "Painel admin — Edu Study" },
-      { property: "og:description", content: "Gerencie atividades do Edu Study." },
+      { property: "og:description", content: "Gerencie atividades e compras Premium do Edu Study." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -19,6 +19,15 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 
 function AdminIndexPage() {
   const items = [
+    {
+      to: "/admin/premium",
+      Icon: Crown,
+      title: "Premium",
+      description: "Veja compradores, liberações, aprovações e testes.",
+      color: "text-gem",
+      bg: "bg-gem/10",
+      border: "border-gem/40",
+    },
     {
       to: "/admin/atividades",
       Icon: BookOpenCheck,
@@ -37,7 +46,7 @@ function AdminIndexPage() {
           <Mascot size={64} />
           <div>
             <h1 className="text-xl font-black">Painel admin</h1>
-            <p className="text-sm font-bold text-muted-foreground">Gerencie as atividades.</p>
+            <p className="text-sm font-bold text-muted-foreground">Gerencie atividades e assinaturas Premium.</p>
           </div>
         </div>
 
